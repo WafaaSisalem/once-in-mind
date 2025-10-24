@@ -1,0 +1,54 @@
+name: onceinmind
+description: "A new Flutter project."
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_core: ^4.2.0
+  firebase_auth: ^6.1.1
+  flutter_bloc: ^8.1.2
+  equatable: ^2.0.5
+  # flutter_screenutil: ^5.6.0
+  flutter_styled_toast: ^2.2.1
+  flutter_native_splash: ^2.4.7
+  go_router: ^16.2.5
+  flutter_svg: ^2.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/fonts/
+    - assets/images/svgs/
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
+flutter_native_splash:
+  color: "#FFFFFF"
+  color_dark: "#FFFFFF"
+  image: assets/images/logo_small.png
+  android_12:
+    image: assets/images/logo_big.png
+    color: "#FFFFFF"
+    color_dark: "#FFFFFF"
+  web: false
+  android: true
+  ios: true
