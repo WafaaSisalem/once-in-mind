@@ -45,16 +45,19 @@ class SignUpPage extends StatelessWidget {
                       }
                     },
                     builder: (context, state) {
-                      return ElevatedButton(
-                        onPressed: () {
-                          final email = emailController.text.trim();
-                          final password = passwordController.text;
-                          context.read<AuthCubit>().signUp(email, password);
-                        },
-                        child: state is AuthLoading
-                            ? CircularProgressIndicator()
-                            : Text('Sign Up'),
-                      );
+                      return state is AuthLoading
+                          ? CircularProgressIndicator()
+                          : ElevatedButton(
+                              onPressed: () {
+                                final email = emailController.text.trim();
+                                final password = passwordController.text;
+                                context.read<AuthCubit>().signUp(
+                                  email,
+                                  password,
+                                );
+                              },
+                              child: Text('Sign Up'),
+                            );
                     },
                   ),
                 ],

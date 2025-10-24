@@ -47,16 +47,19 @@ class SignInPage extends StatelessWidget {
                       }
                     },
                     builder: (context, state) {
-                      return ElevatedButton(
-                        onPressed: () {
-                          final email = emailController.text.trim();
-                          final password = passwordController.text;
-                          context.read<AuthCubit>().signIn(email, password);
-                        },
-                        child: state is AuthLoading
-                            ? CircularProgressIndicator()
-                            : Text('Sign In'),
-                      );
+                      return state is AuthLoading
+                          ? CircularProgressIndicator()
+                          : ElevatedButton(
+                              onPressed: () {
+                                final email = emailController.text.trim();
+                                final password = passwordController.text;
+                                context.read<AuthCubit>().signIn(
+                                  email,
+                                  password,
+                                );
+                              },
+                              child: Text('Sign In'),
+                            );
                     },
                   ),
                   const SizedBox(height: 30),

@@ -5,8 +5,12 @@ import 'package:onceinmind/features/auth/presentation/cubits/auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final AuthRepository _authRepository;
-
-  AuthCubit(this._authRepository) : super(AuthInitial());
+  AuthCubit(this._authRepository)
+    : super(
+        _authRepository.currentUser != null
+            ? AuthSignedIn(_authRepository.currentUser!)
+            : AuthSignedOut(),
+      );
 
   void signIn(String email, String password) async {
     await _authenticate(email, password, isSignUp: false);
@@ -28,7 +32,6 @@ class AuthCubit extends Cubit<AuthState> {
   }) async {
     emit(AuthLoading());
     try {
-      // ✅ input validation
       if (email.isEmpty || password.isEmpty) {
         emit(AuthError('Please fill all fields.'));
         return;

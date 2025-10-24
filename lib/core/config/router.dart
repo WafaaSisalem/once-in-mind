@@ -2,15 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onceinmind/features/auth/presentation/pages/sign_in_page.dart';
 import 'package:onceinmind/features/auth/presentation/pages/sign_up_page.dart';
-import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onceinmind/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:onceinmind/features/auth/presentation/cubits/auth_state.dart';
 
 class AppRouter {
   static final GoRouter _router = GoRouter(
-    initialLocation: '/sign-up',
+    initialLocation: '/sign-in',
     debugLogDiagnostics: true,
+    redirect: (context, state) {
+      final authState = context.read<AuthCubit>().state;
+      final loggingIn =
+          state.fullPath == '/sign-in' || state.fullPath == '/sign-up';
+
+      if (authState is AuthSignedIn && loggingIn) {
+        return '/home';
+      }
+
+      if (authState is AuthSignedOut && !loggingIn) {
+        return '/sign-in';
+      }
+
+      return null;
+    },
     routes: [
       // Auth routes
       GoRoute(
