@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:onceinmind/features/auth/data/auth_repository.dart';
-import 'package:onceinmind/features/auth/presentation/cubits/auth_state.dart';
+import 'package:onceinmind/features/auth/data/repositories/auth_repository.dart';
+import 'package:onceinmind/features/auth/presentation/cubits/auth/auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final AuthRepository _authRepository;
@@ -12,15 +12,15 @@ class AuthCubit extends Cubit<AuthState> {
             : AuthSignedOut(),
       );
 
-  void signIn(String email, String password) async {
+  Future<void> signIn(String email, String password) async {
     await _authenticate(email, password, isSignUp: false);
   }
 
-  void signUp(String email, String password) async {
+  Future<void> signUp(String email, String password) async {
     await _authenticate(email, password, isSignUp: true);
   }
 
-  void signOut() async {
+  Future<void> signOut() async {
     await _authRepository.signOut();
     emit(AuthSignedOut());
   }
@@ -65,7 +65,7 @@ class AuthCubit extends Cubit<AuthState> {
         'weak-password' => 'Please enter a stronger password.',
         'user-not-found' => 'No user found for that email.',
         'wrong-password' => 'Incorrect password. Please try again.',
-        _ => 'An unknown error occurred. Please try again.',
+        _ => 'Incorrect email or password. Please try again.',
       };
 
       emit(AuthError(message));

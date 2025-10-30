@@ -49,6 +49,31 @@ class AppTextStyles {
     fontWeight: _w500,
   );
 
+  static TextStyle get titleSmall => _base.copyWith(
+    fontSize: AppTextStyles._size11,
+    fontWeight: AppTextStyles._w500,
+    color: AppColors.black,
+  );
+  static TextStyle get titleLarge => _base.copyWith(
+    fontSize: AppTextStyles._size13,
+    fontWeight: AppTextStyles._w700,
+    color: AppColors.secondaryColor,
+  );
+  static TextStyle get displaySmall => _base.copyWith(
+    color: AppColors.black,
+    fontSize: AppTextStyles._size13,
+    fontWeight: AppTextStyles._w600,
+  );
+  static TextStyle get displayMedium => _base.copyWith(
+    color: AppColors.white,
+    fontSize: AppTextStyles._size15,
+    fontWeight: AppTextStyles._w600,
+  );
+  static TextStyle get displayLarge => _base.copyWith(
+    color: AppColors.secondaryColor,
+    fontSize: AppTextStyles._size18,
+    fontWeight: AppTextStyles._w700,
+  );
   static TextStyle get buttonText =>
       _base.copyWith(fontSize: _size13, fontWeight: _w600);
 
@@ -77,34 +102,22 @@ class AppTheme {
         selectionColor: AppColors.secondaryColor,
       ),
       textTheme: TextTheme(
-        displayLarge: AppTextStyles._base.copyWith(
-          color: AppColors.secondaryColor,
-          fontSize: AppTextStyles._size18,
-          fontWeight: AppTextStyles._w700,
-        ),
-        displayMedium: AppTextStyles._base.copyWith(
-          color: AppColors.white,
-          fontSize: AppTextStyles._size15,
-          fontWeight: AppTextStyles._w600,
-        ),
-        displaySmall: AppTextStyles._base.copyWith(
-          color: AppColors.black,
-          fontSize: AppTextStyles._size13,
-          fontWeight: AppTextStyles._w600,
-        ),
+        displayLarge: AppTextStyles.displayLarge,
+        displayMedium: AppTextStyles.displayMedium,
+        displaySmall: AppTextStyles.displaySmall,
         headlineMedium: AppTextStyles.headlineMedium,
-        titleLarge: AppTextStyles._base.copyWith(
-          fontSize: AppTextStyles._size13,
-          fontWeight: AppTextStyles._w700,
-          color: AppColors.secondaryColor,
-        ),
+        titleLarge: AppTextStyles.titleLarge,
         bodyLarge: AppTextStyles.bodyLarge,
         bodyMedium: AppTextStyles.bodyMedium,
-        titleSmall: AppTextStyles._base.copyWith(
-          fontSize: AppTextStyles._size11,
-          fontWeight: AppTextStyles._w500,
-          color: AppColors.black,
+        titleSmall: AppTextStyles.titleSmall,
+      ),
+      appBarTheme: AppBarThemeData(
+        backgroundColor: AppColors.primaryColor,
+
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(36)),
         ),
+        titleTextStyle: AppTextStyles.displayMedium,
       ),
       // Button themes
       elevatedButtonTheme: ElevatedButtonThemeData(

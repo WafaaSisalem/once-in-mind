@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onceinmind/core/widgets/toast.dart';
-import 'package:onceinmind/features/auth/presentation/cubits/auth_cubit.dart';
-import 'package:onceinmind/features/auth/presentation/cubits/auth_state.dart';
+import 'package:onceinmind/features/auth/data/models/user_model.dart';
+import 'package:onceinmind/features/auth/presentation/cubits/auth/auth_cubit.dart';
+import 'package:onceinmind/features/auth/presentation/cubits/auth/auth_state.dart';
+import 'package:onceinmind/features/auth/presentation/cubits/user/user_cubit.dart';
 import 'package:onceinmind/features/auth/presentation/widgets/registration_base.dart';
 import 'package:onceinmind/features/auth/presentation/widgets/registration_form.dart';
 import 'package:onceinmind/features/auth/presentation/widgets/text_button_underform.dart';
@@ -41,6 +43,9 @@ class SignUpPage extends StatelessWidget {
                       if (state is AuthError) {
                         showMyToast(context: context, message: state.message);
                       } else if (state is AuthSignedIn) {
+                        context.read<UserCubit>().saveUserData(
+                          UserModel(id: state.user.uid),
+                        );
                         context.go('/home');
                       }
                     },
@@ -48,7 +53,7 @@ class SignUpPage extends StatelessWidget {
                       return state is AuthLoading
                           ? CircularProgressIndicator()
                           : ElevatedButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 final email = emailController.text.trim();
                                 final password = passwordController.text;
                                 context.read<AuthCubit>().signUp(
