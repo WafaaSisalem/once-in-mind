@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:onceinmind/core/widgets/home_appbar.dart';
+import 'package:onceinmind/core/widgets/appbar_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/journals_cubit.dart';

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onceinmind/core/config/theme.dart';
+import 'package:onceinmind/core/constants/app_routes.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
 import 'package:onceinmind/core/widgets/toast.dart';
 import 'package:onceinmind/features/auth/presentation/cubits/auth/auth_cubit.dart';
@@ -45,7 +46,7 @@ class SignInPage extends StatelessWidget {
                         showMyToast(context: context, message: state.message);
                       } else if (state is AuthSignedIn) {
                         context.read<UserCubit>().getUserData(state.user.uid);
-                        context.go('/home');
+                        context.goNamed(AppRoutes.home);
                       }
                     },
                     builder: (context, state) {
@@ -103,7 +104,7 @@ class SignInPage extends StatelessWidget {
                   SizedBox(height: 20),
                   GestureDetector(
                     onTap: () {
-                      context.go('/sign-up');
+                      context.goNamed(AppRoutes.signUp);
                     },
                     child: Text(
                       'Create account',

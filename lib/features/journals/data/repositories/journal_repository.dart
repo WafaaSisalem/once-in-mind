@@ -13,9 +13,7 @@ class JournalRepository {
         .collection(AppCollections.journal)
         .orderBy(AppKeys.date, descending: true)
         .get();
-    print(
-      query.docs.map((doc) => JournalModel.fromMap(doc.data() as Map)).toList(),
-    );
+
     return query.docs
         .map((doc) => JournalModel.fromMap(doc.data() as Map))
         .toList();

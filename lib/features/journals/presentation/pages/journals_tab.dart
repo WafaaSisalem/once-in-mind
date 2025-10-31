@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/journals_cubit.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/journals_state.dart';
+import 'package:onceinmind/features/journals/presentation/widgets/journal_item.dart';
 
-class JournalsPage extends StatelessWidget {
-  const JournalsPage({super.key});
+class JournalsTab extends StatelessWidget {
+  const JournalsTab({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,25 +27,7 @@ class JournalsPage extends StatelessWidget {
             itemCount: state.journals.length,
             itemBuilder: (context, index) {
               final journal = state.journals[index];
-              return Card(
-                margin: const EdgeInsets.only(bottom: 12),
-                child: ListTile(
-                  title: Text(
-                    journal.content,
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  subtitle: Text(
-                    journal.date.toString(),
-                    style: const TextStyle(fontSize: 13, color: Colors.grey),
-                  ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    onPressed: () {
-                      context.read<JournalsCubit>().deleteJournal(journal.id);
-                    },
-                  ),
-                ),
-              );
+              return JournalItem(journal: journal);
             },
           );
         }
@@ -61,20 +44,6 @@ class JournalsPage extends StatelessWidget {
         return const Center(child: Text('No data.'));
       },
     );
-    // return BlocBuilder<JournalsCubit, JournalsState>(
-    //   builder: (context, state) => Center(
-    //     child: state is JournalsLoading
-    //         ? const CircularProgressIndicator()
-    //         : state is JournalsLoaded
-    //         ? Column(
-    //             mainAxisAlignment: MainAxisAlignment.center,
-    //             children: state.journals
-    //                 .map((journal) => Text(journal.content))
-    //                 .toList(),
-    //           )
-    //         : Text(state is JournalsError ? state.message : ''),
-    //   ),
-    // );
   }
 }
 

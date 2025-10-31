@@ -59,4 +59,25 @@ class JournalModel extends Equatable {
 
   @override
   List<Object?> get props => [content, date, location, status, imagesUrls];
+
+  JournalModel copyWith({
+    String? content,
+    DateTime? date,
+    bool? isLocked,
+    LocationModel? location,
+    String? weather,
+    List<dynamic>? imagesUrls,
+    String? status,
+  }) {
+    return JournalModel(
+      id: id,
+      content: content ?? this.content,
+      date: date ?? this.date,
+      isLocked: isLocked ?? this.isLocked,
+      location: location ?? this.location,
+      weather: weather ?? this.weather,
+      imagesUrls: imagesUrls ?? this.imagesUrls,
+      status: status ?? this.status,
+    );
+  }
 }

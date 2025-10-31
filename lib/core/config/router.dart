@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:onceinmind/core/constants/app_routes.dart';
 import 'package:onceinmind/features/auth/presentation/pages/sign_in_page.dart';
 import 'package:onceinmind/features/auth/presentation/pages/sign_up_page.dart';
 
@@ -7,23 +8,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onceinmind/features/auth/presentation/cubits/auth/auth_cubit.dart';
 import 'package:onceinmind/features/auth/presentation/cubits/auth/auth_state.dart';
 import 'package:onceinmind/features/home/presentation/pages/home_page.dart';
+import 'package:onceinmind/features/journals/data/models/journal_model.dart';
 import 'package:onceinmind/features/journals/presentation/pages/add_journal_page.dart';
+import 'package:onceinmind/features/journals/presentation/pages/display_journal_page.dart';
+import 'package:onceinmind/features/journals/presentation/pages/edit_journal_page.dart';
 
 class AppRouter {
   static final GoRouter _router = GoRouter(
-    initialLocation: '/sign-in',
+    initialLocation: '/${AppRoutes.signIn}',
     debugLogDiagnostics: true,
     redirect: (context, state) {
       final authState = context.read<AuthCubit>().state;
       final loggingIn =
-          state.fullPath == '/sign-in' || state.fullPath == '/sign-up';
+          state.fullPath == '/${AppRoutes.signIn}' ||
+          state.fullPath == '/${AppRoutes.signUp}';
 
       if (authState is AuthSignedIn && loggingIn) {
-        return '/home';
+        return '/${AppRoutes.home}';
       }
 
       if (authState is AuthSignedOut && !loggingIn) {
-        return '/sign-in';
+        return '/${AppRoutes.signIn}';
       }
 
       return null;
@@ -31,52 +36,72 @@ class AppRouter {
     routes: [
       // Auth routes
       GoRoute(
-        path: '/sign-in',
-        name: 'sign-in',
+        path: '/${AppRoutes.signIn}',
+        name: AppRoutes.signIn,
         builder: (context, state) => SignInPage(),
       ),
       GoRoute(
-        path: '/sign-up',
-        name: 'sign-up',
+        path: '/${AppRoutes.signUp}',
+        name: AppRoutes.signUp,
         builder: (context, state) => SignUpPage(),
       ),
 
       // Main app routes (protected)
       GoRoute(
-        path: '/home',
-        name: 'home',
+        path: '/${AppRoutes.home}',
+        name: AppRoutes.home,
         builder: (context, state) => HomePage(),
         routes: [
           //Add journal Screen
           GoRoute(
-            path: '/add-journal',
-            name: 'add-journal',
+            path: AppRoutes.addJournal,
+            name: AppRoutes.addJournal,
             builder: (context, state) => AddJournalPage(),
           ),
-        ],
-      ),
 
-      // Journal routes
-      GoRoute(
-        path: '/journal',
-        name: 'journal',
-        builder: (context, state) => const JournalPage(),
-        routes: [
+          //display journal Screen
           GoRoute(
-            path: 'editor',
-            name: 'journal-editor',
-            builder: (context, state) => const EntryEditorPage(),
-          ),
-          GoRoute(
-            path: 'detail/:id',
-            name: 'journal-detail',
+            path: AppRoutes.displayJournal,
+            name: AppRoutes.displayJournal,
+            routes: [
+              //edit journal Screen
+              GoRoute(
+                path: AppRoutes.editJournal,
+                name: AppRoutes.editJournal,
+                builder: (context, state) =>
+                    EditJournalPage(journal: state.extra as JournalModel),
+              ),
+            ],
             builder: (context, state) {
-              final id = state.pathParameters['id']!;
-              return EntryDetailPage(entryId: id);
+              final journal = state.extra as JournalModel;
+              return DisplayJournalPage(
+                // journal: JournalModel(
+                //   id: 'id',
+                //   imagesUrls: [
+                //     'https://blog.adobe.com/en/publish/2024/10/14/media_1ca79b205381242c5f8beaaee2f0e1cfb2aa8f324.png?width=2000&format=webply&optimize=medium',
+                //     'https://blog.adobe.com/en/publish/2024/10/14/media_1ca79b205381242c5f8beaaee2f0e1cfb2aa8f324.png?width=2000&format=webply&optimize=medium',
+                //   ],
+                //   content:
+                //       'when the days are cold and the cards all fold and the saints we see are all made of gold. when the dreams all failed and the one we hail are the worst of all and the bloods run stail',
+                //   date: DateTime.now(),
+                //   isLocked: false,
+                //   location: LocationModel(22, 22, 'address'),
+                // ),
+                journal: journal,
+              );
             },
           ),
         ],
       ),
+
+      // GoRoute(
+      //   path: 'detail/:id',
+      //   name: 'journal-detail',
+      //   builder: (context, state) {
+      //     final id = state.pathParameters['id']!;
+      //     return EntryDetailPage(entryId: id);
+      //   },
+      // ),
 
       // Calendar route
       GoRoute(
@@ -113,28 +138,6 @@ class AppRouter {
   );
 
   static GoRouter get router => _router;
-}
-
-class JournalPage extends StatelessWidget {
-  const JournalPage({super.key});
-  @override
-  Widget build(BuildContext context) =>
-      const Scaffold(body: Center(child: Text('Journal Page')));
-}
-
-class EntryEditorPage extends StatelessWidget {
-  const EntryEditorPage({super.key});
-  @override
-  Widget build(BuildContext context) =>
-      const Scaffold(body: Center(child: Text('Entry Editor Page')));
-}
-
-class EntryDetailPage extends StatelessWidget {
-  final String entryId;
-  const EntryDetailPage({super.key, required this.entryId});
-  @override
-  Widget build(BuildContext context) =>
-      Scaffold(body: Center(child: Text('Entry Detail: $entryId')));
 }
 
 class CalendarPage extends StatelessWidget {
