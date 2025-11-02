@@ -1,16 +1,18 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:onceinmind/features/auth/data/repositories/auth_repository.dart';
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
 import 'package:onceinmind/features/journals/data/repositories/journal_repository.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/journals_state.dart';
 
 class JournalsCubit extends Cubit<JournalsState> {
   final JournalRepository _journalRepository;
-  final String userId;
-  //ممكن ناخد الid من الشيرد بريف اسالي التشات المشكلة عنا لمن يعمل ال يوزر تسجيل دخول ما رح يكون في يوزر بالتالي شرط تحقق الكرنت يوزر ما بزبط فما رح ينعمل الحورنال كيوبت بالمين
-  JournalsCubit(this._journalRepository, this.userId)
+  final AuthRepository _authRepository;
+  JournalsCubit(this._journalRepository, this._authRepository)
     : super(JournalsInitial());
-
+  get userId => _authRepository.currentUser?.uid;
   Future<void> fetchJournals() async {
+    if (state is JournalsLoading || state is JournalsLoaded) return;
+
     emit(JournalsLoading());
     try {
       final List<JournalModel> journals = await _journalRepository
@@ -34,21 +36,9 @@ class JournalsCubit extends Cubit<JournalsState> {
     } catch (e) {
       emit(JournalsError('Failed to add journal'));
     }
-    // try {
-    //   await _journalRepository.addJournal(userId, journal);
-    //   await fetchJournals();
-    // } catch (e) {
-    //   emit(JournalsError('Failed to add journal'));
-    // }
   }
 
   Future<void> updateJournal(JournalModel journal) async {
-    // try {
-    //   await _journalRepository.updateJournal(userId, journal);
-    //   await fetchJournals();
-    // } catch (e) {
-    //   emit(JournalsError('Failed to update journal'));
-    // }
     try {
       await _journalRepository.updateJournal(userId, journal);
 
@@ -84,11 +74,9 @@ class JournalsCubit extends Cubit<JournalsState> {
     } catch (e) {
       emit(JournalsError('Failed to delete journal'));
     }
-    // try {
-    //   await _journalRepository.deleteJournal(userId, journalId);
-    //   await fetchJournals();
-    // } catch (e) {
-    //   emit(JournalsError('Failed to delete journal'));
-    // }
+  }
+
+  void resetState() {
+    emit(JournalsInitial());
   }
 }

@@ -46,7 +46,7 @@ class AppRouter {
         builder: (context, state) => SignUpPage(),
       ),
 
-      // Main app routes (protected)
+      // Main app routes
       GoRoute(
         path: '/${AppRoutes.home}',
         name: AppRoutes.home,

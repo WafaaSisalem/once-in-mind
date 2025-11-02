@@ -10,6 +10,7 @@ class JournalsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<JournalsCubit, JournalsState>(
+      bloc: context.read<JournalsCubit>()..fetchJournals(),
       builder: (context, state) {
         if (state is JournalsLoading) {
           return const Center(child: CircularProgressIndicator());
@@ -52,7 +53,7 @@ class CalendarPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Calendar Page'));
+    return const Center(child: Text('Calendar Page'));
   }
 }
 
@@ -61,7 +62,7 @@ class MapPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Map Page'));
+    return const Center(child: Text('Map Page'));
   }
 }
 
@@ -70,6 +71,6 @@ class GalleryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Gallery Page'));
+    return const Center(child: Text('Gallery Page'));
   }
 }

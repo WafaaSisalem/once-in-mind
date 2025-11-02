@@ -30,15 +30,22 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => AuthCubit(_authRepository)),
-        BlocProvider(create: (_) => UserCubit(_userRepository)),
-        if (_authRepository.currentUser != null)
-          BlocProvider(
-            create: (_) => JournalsCubit(
-              _journalRepository,
-              _authRepository.currentUser!.uid,
-            )..fetchJournals(),
-          ),
+        BlocProvider(
+          create: (_) {
+            return AuthCubit(_authRepository);
+          },
+        ),
+        BlocProvider(
+          create: (_) {
+            return UserCubit(_userRepository);
+          },
+        ),
+        BlocProvider(
+          create: (context) {
+            return JournalsCubit(_journalRepository, _authRepository)
+              ..fetchJournals();
+          },
+        ),
       ],
       child: MaterialApp.router(
         theme: AppTheme.lightTheme,

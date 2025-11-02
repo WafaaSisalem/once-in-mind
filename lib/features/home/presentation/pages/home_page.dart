@@ -3,16 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onceinmind/core/config/theme.dart';
 import 'package:onceinmind/core/constants/app_routes.dart';
-import 'package:onceinmind/core/utils/app_assets.dart';
 import 'package:onceinmind/core/widgets/toast.dart';
 import 'package:onceinmind/features/auth/presentation/cubits/auth/auth_cubit.dart';
 import 'package:onceinmind/features/auth/presentation/cubits/auth/auth_state.dart';
+import 'package:onceinmind/features/home/data/tabs.dart';
 import 'package:onceinmind/features/home/presentation/widgets/bottom_nav_widget.dart';
 import 'package:onceinmind/features/home/presentation/widgets/fab_widget.dart';
 import 'package:onceinmind/core/widgets/appbar_widget.dart';
-import 'package:onceinmind/features/journals/presentation/pages/journals_tab.dart';
-
-typedef TabModel = ({Widget content, dynamic title, String iconPath});
+import 'package:onceinmind/features/journals/presentation/cubits/journals_cubit.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -26,25 +24,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print('reeeeeeebuilllllllllllllllllllllllllllllld');
-    List<TabModel> tabs = [
-      (
-        content: const JournalsTab(),
-        title: 'Home Page',
-        iconPath: AppAssets.allJournals,
-      ),
-      (
-        content: const JournalsTab(),
-        title: 'Calendar',
-        iconPath: AppAssets.calendar,
-      ),
-      (content: const MapPage(), title: 'Location', iconPath: AppAssets.map),
-      (
-        content: const GalleryPage(),
-        title: 'Gallery',
-        iconPath: AppAssets.gallery,
-      ),
-    ];
     return Scaffold(
       appBar: AppbarWidget(
         titlePlace: Row(
@@ -54,6 +33,7 @@ class _HomePageState extends State<HomePage> {
           PopupMenuButton<String>(
             iconColor: AppColors.white,
             onSelected: (value) {
+              context.read<JournalsCubit>().resetState();
               context.read<AuthCubit>().signOut();
             },
             itemBuilder: (BuildContext context) {
@@ -81,7 +61,6 @@ class _HomePageState extends State<HomePage> {
             showMyToast(message: state.message, context: context);
           }
         },
-
         child: tabs[currentIndex].content,
       ),
       bottomNavigationBar: BottomNavWidget(
