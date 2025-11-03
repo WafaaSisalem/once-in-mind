@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:onceinmind/core/config/router.dart';
+import 'package:onceinmind/core/constants/app_routes.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
 import 'package:onceinmind/core/widgets/appbar_widget.dart';
+import 'package:onceinmind/core/widgets/custom_back_button.dart';
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
+import 'package:onceinmind/features/journals/presentation/widgets/inline_slider_widget.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/writing_area.dart';
 
 class DisplayJournalPage extends StatefulWidget {
@@ -18,73 +22,55 @@ class DisplayJournalPage extends StatefulWidget {
 
 class _DisplayJournalPageState extends State<DisplayJournalPage> {
   late JournalModel _journal;
-
+  late TextEditingController _controller;
   @override
   void initState() {
     super.initState();
-    _journal = widget.journal;
+    _journal = widget
+        .journal; // لانه ممكن اليوزر يروح عصفحة تعديل الجورنال وهذا التعديل رح ينعكس عالصفحة عندي
+    _controller = TextEditingController(text: _journal.content);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppbarWidget(
-        titlePlace: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_rounded,
-            size: 28,
-            color: Colors.white, //
-          ),
-          onPressed: () {
-            context.pop();
-          },
-        ),
+        titlePlace: CustomBackButton(),
         actions: [
-          InkWell(
-            child: SizedBox(
-              width: 18,
-              height: 18,
-              child: AppAssets.svgWhiteDelete,
-            ),
+          _appBarIcon(
+            icon: AppAssets.svgWhiteDelete,
             onTap: () {
               //show Delete Dialog
             },
           ),
           SizedBox(width: 15),
-          InkWell(
-            // splashColor: Colors.transparent,
-            child: SizedBox(
-              width: 18,
-              height: 18,
-              child: _journal.isLocked
-                  ? AppAssets.svgWhiteUnlock
-                  : AppAssets.svgWhiteLock,
-            ),
+          _appBarIcon(
+            icon: _journal.isLocked
+                ? AppAssets.svgWhiteUnlock
+                : AppAssets.svgWhiteLock,
             onTap: () {
               //lock logic
             },
           ),
           SizedBox(width: 15),
-          InkWell(
-            // splashColor: Colors.transparent,
-            child: SizedBox(
-              width: 18,
-              height: 18,
-              child: AppAssets.svgEditIcon,
-            ),
+          _appBarIcon(
+            icon: AppAssets.svgEditIcon,
             onTap: () async {
-              // context.go(
-              //   '/home/display-journal/edit-journal',
-              //   extra: _journal,
-              // );
-              final updatedJournal = await context.push<JournalModel>(
-                '/home/display-journal/edit-journal',
+              final updatedJournal = await context.pushNamed<JournalModel>(
+                AppRoutes.editJournal,
                 extra: _journal,
               );
 
               if (updatedJournal != null) {
                 setState(() {
                   _journal = updatedJournal;
+                  _controller.text = _journal.content;
                 });
               }
             },
@@ -97,65 +83,16 @@ class _DisplayJournalPageState extends State<DisplayJournalPage> {
         child: Column(
           children: [
             if (_journal.imagesUrls.isNotEmpty) ...[
-              imageSlider(),
+              InlineSliderWidget(journal: _journal),
               SizedBox(height: 7),
             ],
             dateStack(context),
             SizedBox(height: 20),
             Expanded(
-              child: WritingArea(
-                enabled: false,
-
-                controller: TextEditingController(text: _journal.content),
-                hintText: 'What happened with you today?',
-              ),
+              child: WritingArea(readOnly: true, controller: _controller),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  imageSlider() {
-    int currentImageIndex = 0;
-    return Container(
-      width: double.infinity,
-      height: 150,
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0x28000000), //
-            offset: Offset(0, 3),
-            blurRadius: 6,
-          ),
-        ],
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: ImageSlideshow(
-        indicatorColor: Colors.white,
-        indicatorBackgroundColor: Colors.grey.withOpacity(0.5),
-        onPageChanged: (value) => currentImageIndex = value,
-        children: _journal.imagesUrls
-            .map(
-              (imageUrl) => InkWell(
-                child: Hero(
-                  tag: _journal.id,
-                  child: CachedNetworkImage(
-                    fit: BoxFit.cover,
-                    imageUrl: imageUrl,
-                    placeholder: (context, url) =>
-                        Container(color: Colors.black12),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
-                  ),
-                ),
-                onTap: () {
-                  //slider viewr
-                },
-              ),
-            )
-            .toList(),
       ),
     );
   }
@@ -257,6 +194,13 @@ class _DisplayJournalPageState extends State<DisplayJournalPage> {
           overflow: TextOverflow.ellipsis,
         ),
       ),
+    );
+  }
+
+  Widget _appBarIcon({required Widget icon, required VoidCallback onTap}) {
+    return InkWell(
+      onTap: onTap,
+      child: SizedBox(width: 18, height: 18, child: icon),
     );
   }
 }

@@ -11,13 +11,12 @@ class JournalsCubit extends Cubit<JournalsState> {
     : super(JournalsInitial());
   get userId => _authRepository.currentUser?.uid;
   Future<void> fetchJournals() async {
-    if (state is JournalsLoading || state is JournalsLoaded) return;
-
+    if (state is JournalsLoaded || state is JournalsLoading) return;
     emit(JournalsLoading());
     try {
       final List<JournalModel> journals = await _journalRepository
           .getAllJournals(userId);
-
+      print('gettings jouranl');
       emit(JournalsLoaded(journals));
     } catch (e) {
       emit(JournalsError(e.toString()));
@@ -27,12 +26,17 @@ class JournalsCubit extends Cubit<JournalsState> {
   Future<void> addJournal(JournalModel journal) async {
     try {
       await _journalRepository.addJournal(userId, journal);
-      if (state is JournalsLoaded) {
-        final currentJournals = (state as JournalsLoaded).journals;
-        emit(JournalsLoaded([journal, ...currentJournals]));
-      } else {
-        await fetchJournals();
-      }
+      emit(
+        JournalsInitial(),
+      ); //حسب لوجيك الفيتش ما رح تعمل فيتش الا اذا ايرور او انيشيال
+      await fetchJournals();
+      // ما ضفت عالجورنال الي عنا  لوكالي، لانه ممكن احيانا نختار تاريخ غير ففضلت ياخد البيانات مرتبة بتاريخها من ال الفيرستور
+      // if (state is JournalsLoaded) {
+      //   final currentJournals = (state as JournalsLoaded).journals;
+      //   emit(JournalsLoaded([journal, ...currentJournals]));
+      // } else {
+      //   await fetchJournals();
+      // }
     } catch (e) {
       emit(JournalsError('Failed to add journal'));
     }

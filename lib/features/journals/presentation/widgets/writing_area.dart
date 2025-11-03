@@ -1,98 +1,86 @@
 import 'package:flutter/material.dart';
 
-class WritingArea extends StatelessWidget {
-  WritingArea({
+class WritingArea extends StatefulWidget {
+  const WritingArea({
     super.key,
-    // required this.onChanged,
     required this.controller,
-    required this.hintText,
-    this.enabled = true,
+    this.readOnly = false,
   });
 
-  // final Function(String) onChanged;
-  final TextEditingController? controller;
-  final String hintText;
-  final bool enabled;
-  late BuildContext context;
-  final FocusNode focusNode = FocusNode();
-  final UndoHistoryController undoController = UndoHistoryController();
+  final TextEditingController controller;
+  final bool readOnly;
 
-  Color? get enabledStyle => Theme.of(context).primaryColor;
-  Color? get disabledStyle => Colors.grey;
+  @override
+  State<WritingArea> createState() => _WritingAreaState();
+}
+
+class _WritingAreaState extends State<WritingArea> {
+  final UndoHistoryController _undoController = UndoHistoryController();
+
+  @override
+  void dispose() {
+    _undoController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    this.context = context;
-    ThemeData theme = Theme.of(context);
+    final theme = Theme.of(context);
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
+      children: [
         Expanded(
-          flex: 9,
           child: TextField(
-            minLines: 1,
-            maxLines: MediaQuery.of(context).size.height.toInt() - 100,
-            cursorColor: Colors.grey, //
-            controller: controller,
-            focusNode: focusNode,
-            undoController: undoController,
-            enabled: enabled,
-            // onChanged: onChanged,
-            style: theme.textTheme.headlineMedium!.copyWith(
-              height: 1.5,
-              fontSize: 18,
+            controller: widget.controller,
+            undoController: _undoController,
+            readOnly: widget.readOnly,
+            cursorColor: theme.colorScheme.primary,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              height: 1.6,
+              fontSize: 17,
             ),
             keyboardType: TextInputType.multiline,
+            maxLines: null,
             decoration: InputDecoration(
-              border: const OutlineInputBorder(borderSide: BorderSide.none),
-              contentPadding: const EdgeInsets.all(0),
-              hintText: hintText,
-              hintStyle: theme.textTheme.headlineMedium!.copyWith(
-                color: const Color(0x80707070),
+              hintText: 'What happened with you today?',
+              hintStyle: theme.textTheme.bodyLarge?.copyWith(
+                color: Colors.grey[400],
               ),
-            ), //
+              border: InputBorder.none,
+              isDense: true,
+            ),
           ),
         ),
-        if (enabled)
-          Expanded(
-            flex: 1,
-            child: ValueListenableBuilder<UndoHistoryValue>(
-              valueListenable: undoController,
-              builder:
-                  (
-                    BuildContext context,
-                    UndoHistoryValue value,
-                    Widget? child,
-                  ) {
-                    return Row(
-                      mainAxisAlignment:
-                          hintText == 'What happened with you today?'
-                          ? MainAxisAlignment.start
-                          : MainAxisAlignment.center,
-                      children: <Widget>[
-                        IconButton(
-                          icon: Icon(
-                            Icons.undo,
-                            color: value.canUndo ? enabledStyle : disabledStyle,
-                          ),
-                          onPressed: () {
-                            undoController.undo();
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(
-                            Icons.redo,
-                            color: value.canRedo ? enabledStyle : disabledStyle,
-                          ),
-                          onPressed: () {
-                            undoController.redo();
-                          },
-                        ),
-                      ],
-                    );
-                  },
-            ),
+
+        if (!widget.readOnly)
+          ValueListenableBuilder<UndoHistoryValue>(
+            valueListenable: _undoController,
+            builder: (context, value, _) {
+              final colorActive = theme.colorScheme.primary;
+              final colorInactive = Colors.grey[400];
+
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.undo,
+                      color: value.canUndo ? colorActive : colorInactive,
+                    ),
+                    tooltip: 'Undo',
+                    onPressed: value.canUndo ? _undoController.undo : null,
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.redo,
+                      color: value.canRedo ? colorActive : colorInactive,
+                    ),
+                    tooltip: 'Redo',
+                    onPressed: value.canRedo ? _undoController.redo : null,
+                  ),
+                ],
+              );
+            },
           ),
       ],
     );

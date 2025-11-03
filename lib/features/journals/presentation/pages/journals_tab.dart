@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:onceinmind/core/widgets/loading_widget.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/journals_cubit.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/journals_state.dart';
+import 'package:onceinmind/features/journals/presentation/widgets/fallback_widget.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/journal_item.dart';
 
 class JournalsTab extends StatelessWidget {
@@ -12,15 +14,9 @@ class JournalsTab extends StatelessWidget {
     return BlocBuilder<JournalsCubit, JournalsState>(
       bloc: context.read<JournalsCubit>()..fetchJournals(),
       builder: (context, state) {
-        if (state is JournalsLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
         if (state is JournalsLoaded) {
           if (state.journals.isEmpty) {
-            return const Center(
-              child: Text('No journals yet.', style: TextStyle(fontSize: 16)),
-            );
+            return Center(child: FallbackWidget.noJouranl());
           }
 
           return ListView.builder(
@@ -42,7 +38,7 @@ class JournalsTab extends StatelessWidget {
           );
         }
 
-        return const Center(child: Text('No data.'));
+        return const LoadingWidget();
       },
     );
   }

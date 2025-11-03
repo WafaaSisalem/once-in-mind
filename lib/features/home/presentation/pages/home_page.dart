@@ -7,80 +7,82 @@ import 'package:onceinmind/core/widgets/toast.dart';
 import 'package:onceinmind/features/auth/presentation/cubits/auth/auth_cubit.dart';
 import 'package:onceinmind/features/auth/presentation/cubits/auth/auth_state.dart';
 import 'package:onceinmind/features/home/data/tabs.dart';
+import 'package:onceinmind/features/home/presentation/cubits/tabs_cubit.dart';
 import 'package:onceinmind/features/home/presentation/widgets/bottom_nav_widget.dart';
 import 'package:onceinmind/features/home/presentation/widgets/fab_widget.dart';
 import 'package:onceinmind/core/widgets/appbar_widget.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/journals_cubit.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(create: (_) => TabsCubit(), child: const HomeView());
+  }
 }
 
-class _HomePageState extends State<HomePage> {
-  int currentIndex = 0;
+class HomeView extends StatelessWidget {
+  const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppbarWidget(
-        titlePlace: Row(
-          children: [SizedBox(width: 20), Text(tabs[currentIndex].title)],
-        ),
-        actions: [
-          PopupMenuButton<String>(
-            iconColor: AppColors.white,
-            onSelected: (value) {
-              context.read<JournalsCubit>().resetState();
-              context.read<AuthCubit>().signOut();
+    print("building home view");
+    return BlocBuilder<TabsCubit, int>(
+      builder: (context, currentIndex) {
+        return Scaffold(
+          appBar: AppbarWidget(
+            titlePlace: Row(
+              children: [SizedBox(width: 20), Text(tabs[currentIndex].title)],
+            ),
+            actions: [
+              PopupMenuButton<String>(
+                iconColor: AppColors.white,
+                onSelected: (value) {
+                  context.read<JournalsCubit>().resetState();
+                  context.read<AuthCubit>().signOut();
+                },
+                itemBuilder: (BuildContext context) {
+                  return {'Sign Out'}.map((String choice) {
+                    return PopupMenuItem<String>(
+                      value: choice,
+                      child: Text(choice),
+                    );
+                  }).toList();
+                },
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.search, color: AppColors.white),
+              ),
+              SizedBox(width: 20),
+            ],
+          ),
+          body: BlocListener<AuthCubit, AuthState>(
+            listener: (context, state) {
+              if (state is AuthSignedOut) {
+                context.goNamed(AppRoutes.signIn);
+              } else if (state is AuthError) {
+                showMyToast(message: state.message, context: context);
+              }
             },
-            itemBuilder: (BuildContext context) {
-              return {'Sign Out'}.map((String choice) {
-                return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(choice),
-                );
-              }).toList();
+            child: tabs[currentIndex].content,
+          ),
+          bottomNavigationBar: BottomNavWidget(
+            svgs: tabs.map((t) => t.iconPath).toList(),
+            onTap: (index) {
+              context.read<TabsCubit>().changeTab(index);
             },
           ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.search, color: AppColors.white),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: FabWidget(
+            onPressed: () {
+              context.goNamed(AppRoutes.addJournal);
+            },
           ),
-
-          SizedBox(width: 20),
-        ],
-      ),
-      body: BlocListener<AuthCubit, AuthState>(
-        listener: (context, state) {
-          if (state is AuthSignedOut) {
-            context.goNamed(AppRoutes.signIn);
-          } else if (state is AuthError) {
-            showMyToast(message: state.message, context: context);
-          }
-        },
-        child: tabs[currentIndex].content,
-      ),
-      bottomNavigationBar: BottomNavWidget(
-        svgs: [
-          tabs[0].iconPath,
-          tabs[1].iconPath,
-          tabs[2].iconPath,
-          tabs[3].iconPath,
-        ],
-        onTap: (index) {
-          currentIndex = index;
-          setState(() {});
-        },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FabWidget(
-        onPressed: () {
-          context.goNamed(AppRoutes.addJournal);
-        },
-      ),
+        );
+      },
     );
   }
 }

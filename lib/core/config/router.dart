@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onceinmind/core/constants/app_routes.dart';
+import 'package:onceinmind/core/utils/type_defs.dart';
 import 'package:onceinmind/features/auth/presentation/pages/sign_in_page.dart';
 import 'package:onceinmind/features/auth/presentation/pages/sign_up_page.dart';
 
@@ -12,6 +13,8 @@ import 'package:onceinmind/features/journals/data/models/journal_model.dart';
 import 'package:onceinmind/features/journals/presentation/pages/add_journal_page.dart';
 import 'package:onceinmind/features/journals/presentation/pages/display_journal_page.dart';
 import 'package:onceinmind/features/journals/presentation/pages/edit_journal_page.dart';
+import 'package:onceinmind/features/journals/presentation/pages/image_viewer_page.dart';
+import 'package:onceinmind/features/location/data/models/location_model.dart';
 
 class AppRouter {
   static final GoRouter _router = GoRouter(
@@ -71,23 +74,37 @@ class AppRouter {
                 builder: (context, state) =>
                     EditJournalPage(journal: state.extra as JournalModel),
               ),
+              GoRoute(
+                path: AppRoutes.imageViewerPage,
+                name: AppRoutes.imageViewerPage,
+                builder: (context, state) {
+                  ImageInSlider data = state.extra as ImageInSlider;
+                  final journal = data.journal;
+                  final initialIndex = data.initialIndex;
+                  return ImageViewerPage(
+                    journal: journal,
+                    initialIndex: initialIndex,
+                  );
+                },
+              ),
             ],
             builder: (context, state) {
               final journal = state.extra as JournalModel;
               return DisplayJournalPage(
-                // journal: JournalModel(
-                //   id: 'id',
-                //   imagesUrls: [
-                //     'https://blog.adobe.com/en/publish/2024/10/14/media_1ca79b205381242c5f8beaaee2f0e1cfb2aa8f324.png?width=2000&format=webply&optimize=medium',
-                //     'https://blog.adobe.com/en/publish/2024/10/14/media_1ca79b205381242c5f8beaaee2f0e1cfb2aa8f324.png?width=2000&format=webply&optimize=medium',
-                //   ],
-                //   content:
-                //       'when the days are cold and the cards all fold and the saints we see are all made of gold. when the dreams all failed and the one we hail are the worst of all and the bloods run stail',
-                //   date: DateTime.now(),
-                //   isLocked: false,
-                //   location: LocationModel(22, 22, 'address'),
-                // ),
-                journal: journal,
+                journal: JournalModel(
+                  id: 'id',
+                  imagesUrls: [
+                    'https://images.unsplash.com/photo-1615912844755-bd8b6dd6789e?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387',
+                    'https://blog.adobe.com/en/publish/2024/10/14/media_1ca79b205381242c5f8beaaee2f0e1cfb2aa8f324.png?width=2000&format=webply&optimize=medium',
+                    'https://images.unsplash.com/photo-1579037199070-5ddf23c52bfc?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=327',
+                  ],
+                  content:
+                      'when the days are cold and the cards all fold and the saints we see are all made of gold. when the dreams all failed and the one we hail are the worst of all and the bloods run stail',
+                  date: DateTime.now(),
+                  isLocked: false,
+                  location: LocationModel(22, 22, 'address'),
+                ),
+                // journal: journal,
               );
             },
           ),

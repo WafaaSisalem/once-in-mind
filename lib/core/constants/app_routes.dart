@@ -8,12 +8,7 @@ class AppRoutes {
   static const addJournal = 'add-journal';
   static const displayJournal = 'display-journal';
   static const editJournal = 'edit-journal';
-
-  // Journal
-  static const journal = 'journal';
-  static const journalEditor = 'journal-editor';
-  static const journalDetail = 'journal-detail';
-
+  static const imageViewerPage = 'image-viewer-page';
   // Other pages
   static const calendar = 'calendar';
   static const search = 'search';

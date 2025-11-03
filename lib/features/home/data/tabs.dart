@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
+import 'package:onceinmind/core/utils/type_defs.dart';
 import 'package:onceinmind/features/journals/presentation/pages/journals_tab.dart';
-
-typedef TabModel = ({Widget content, dynamic title, String iconPath});
 
 List<TabModel> tabs = [
   (

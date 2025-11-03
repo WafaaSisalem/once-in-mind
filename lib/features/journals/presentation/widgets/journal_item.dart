@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:onceinmind/core/constants/app_routes.dart';
 import 'package:onceinmind/core/constants/app_strings.dart';
+import 'package:onceinmind/core/utils/app_assets.dart';
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/journals_cubit.dart';
 
@@ -33,7 +35,7 @@ class JournalItem extends StatelessWidget {
             style: const TextStyle(fontSize: 13, color: Colors.grey),
           ),
           trailing: IconButton(
-            icon: const Icon(Icons.delete, color: Colors.red),
+            icon: SvgPicture.asset(AppAssets.deleteIcon, width: 20, height: 20),
             onPressed: () {
               context.read<JournalsCubit>().deleteJournal(journal.id);
             },

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:onceinmind/core/widgets/appbar_widget.dart';
+import 'package:onceinmind/core/widgets/custom_back_button.dart';
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/journals_cubit.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/writing_area.dart';
@@ -34,14 +35,7 @@ class _EditJournalPageState extends State<EditJournalPage> {
       appBar: AppbarWidget(
         titlePlace: Row(
           children: [
-            IconButton(
-              icon: const Icon(
-                Icons.arrow_back_ios_rounded,
-                size: 28,
-                color: Colors.white,
-              ),
-              onPressed: () => context.pop(),
-            ),
+            CustomBackButton(),
             const SizedBox(width: 70),
             InkWell(
               onTap: () async {
@@ -99,10 +93,7 @@ class _EditJournalPageState extends State<EditJournalPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-        child: WritingArea(
-          controller: controller,
-          hintText: 'Edit your thoughts...',
-        ),
+        child: WritingArea(controller: controller),
       ),
     );
   }
