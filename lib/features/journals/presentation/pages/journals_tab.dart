@@ -44,15 +44,6 @@ class JournalsTab extends StatelessWidget {
   }
 }
 
-class CalendarPage extends StatelessWidget {
-  const CalendarPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Calendar Page'));
-  }
-}
-
 class MapPage extends StatelessWidget {
   const MapPage({super.key});
 

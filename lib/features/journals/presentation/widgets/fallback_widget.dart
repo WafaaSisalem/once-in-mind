@@ -9,6 +9,9 @@ class FallbackWidget extends StatelessWidget {
   FallbackWidget.noJouranl({super.key})
     : image = AppAssets.svgNoJournal,
       text = 'No journal entries';
+  FallbackWidget.noCalendarEntries({super.key})
+    : image = AppAssets.svgNoCalendarEntry,
+      text = 'No journals entries on this day';
   @override
   Widget build(BuildContext context) {
     return Column(

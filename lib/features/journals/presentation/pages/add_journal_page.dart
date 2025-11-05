@@ -1,17 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onceinmind/core/widgets/appbar_widget.dart';
 import 'package:onceinmind/core/widgets/custom_back_button.dart';
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/journals_cubit.dart';
+import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/custom_expandable_fab.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/date_picker_button.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/writing_area.dart';
 
-class AddJournalPage extends StatelessWidget {
-  AddJournalPage({super.key});
+class AddJournalPage extends StatefulWidget {
+  const AddJournalPage({super.key});
+
+  @override
+  State<AddJournalPage> createState() => _AddJournalPageState();
+}
+
+class _AddJournalPageState extends State<AddJournalPage> {
   final TextEditingController controller = TextEditingController();
+
   DateTime date = DateTime.now();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,6 +61,8 @@ class AddJournalPage extends StatelessWidget {
         padding: const EdgeInsets.only(left: 30, right: 30, top: 20),
         child: WritingArea(controller: controller),
       ),
+      floatingActionButtonLocation: ExpandableFab.location,
+      floatingActionButton: CustomExpandableFab(),
     );
   }
 

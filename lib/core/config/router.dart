@@ -91,20 +91,20 @@ class AppRouter {
             builder: (context, state) {
               final journal = state.extra as JournalModel;
               return DisplayJournalPage(
-                journal: JournalModel(
-                  id: 'id',
-                  imagesUrls: [
-                    'https://images.unsplash.com/photo-1615912844755-bd8b6dd6789e?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387',
-                    'https://blog.adobe.com/en/publish/2024/10/14/media_1ca79b205381242c5f8beaaee2f0e1cfb2aa8f324.png?width=2000&format=webply&optimize=medium',
-                    'https://images.unsplash.com/photo-1579037199070-5ddf23c52bfc?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=327',
-                  ],
-                  content:
-                      'when the days are cold and the cards all fold and the saints we see are all made of gold. when the dreams all failed and the one we hail are the worst of all and the bloods run stail',
-                  date: DateTime.now(),
-                  isLocked: false,
-                  location: LocationModel(22, 22, 'address'),
-                ),
-                // journal: journal,
+                // journal: JournalModel(
+                //   id: 'id',
+                //   imagesUrls: [
+                //     'https://images.unsplash.com/photo-1615912844755-bd8b6dd6789e?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387',
+                //     'https://blog.adobe.com/en/publish/2024/10/14/media_1ca79b205381242c5f8beaaee2f0e1cfb2aa8f324.png?width=2000&format=webply&optimize=medium',
+                //     'https://images.unsplash.com/photo-1579037199070-5ddf23c52bfc?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=327',
+                //   ],
+                //   content:
+                //       'when the days are cold and the cards all fold and the saints we see are all made of gold. when the dreams all failed and the one we hail are the worst of all and the bloods run stail',
+                //   date: DateTime.now(),
+                //   isLocked: false,
+                //   location: LocationModel(22, 22, 'address'),
+                // ),
+                journal: journal,
               );
             },
           ),

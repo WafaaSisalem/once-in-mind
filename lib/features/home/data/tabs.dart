@@ -1,5 +1,6 @@
 import 'package:onceinmind/core/utils/app_assets.dart';
 import 'package:onceinmind/core/utils/type_defs.dart';
+import 'package:onceinmind/features/calendar/presentation/pages/calendar_tab.dart';
 import 'package:onceinmind/features/journals/presentation/pages/journals_tab.dart';
 
 List<TabModel> tabs = [
@@ -9,7 +10,7 @@ List<TabModel> tabs = [
     iconPath: AppAssets.allJournals,
   ),
   (
-    content: const CalendarPage(),
+    content: const CalendarTab(),
     title: 'Calendar',
     iconPath: AppAssets.calendar,
   ),

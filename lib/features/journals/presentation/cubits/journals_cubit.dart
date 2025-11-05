@@ -1,4 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_calendar_carousel/classes/event.dart';
+import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:onceinmind/features/auth/data/repositories/auth_repository.dart';
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
 import 'package:onceinmind/features/journals/data/repositories/journal_repository.dart';
@@ -10,6 +12,32 @@ class JournalsCubit extends Cubit<JournalsState> {
   JournalsCubit(this._journalRepository, this._authRepository)
     : super(JournalsInitial());
   get userId => _authRepository.currentUser?.uid;
+
+  // EventList<Event> get calendarEvents {
+  //   if (state is! JournalsLoaded) return EventList<Event>(events: {});
+  //   final journals = (state as JournalsLoaded).journals;
+  //   return EventList<Event>(
+  //     events: {
+  //       for (final journal in journals)
+  //         journal.date: [Event(date: journal.date, title: journal.id)],
+  //     },
+  //   );
+  // }
+
+  // List<JournalModel> getJournalsByDate(DateTime date) {
+  //   if (state is JournalsLoaded) {
+  //     final journals = (state as JournalsLoaded).journals;
+  //     return journals.where((journal) {
+  //       return isSameDate(journal.date, date);
+  //     }).toList();
+  //   }
+  //   return [];
+  // }
+
+  // bool isSameDate(DateTime a, DateTime b) {
+  //   return a.year == b.year && a.month == b.month && a.day == b.day;
+  // }
+
   Future<void> fetchJournals() async {
     if (state is JournalsLoaded || state is JournalsLoading) return;
     emit(JournalsLoading());

@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:onceinmind/core/utils/date_utils.dart';
 
 class DatePickerButton extends StatefulWidget {
   final Function(DateTime newDate) onChangeDate;
-  const DatePickerButton({super.key, required this.onChangeDate});
+  final DateTime? initialDate;
+  const DatePickerButton({
+    super.key,
+    required this.onChangeDate,
+    this.initialDate,
+  });
 
   @override
   State<DatePickerButton> createState() => _DatePickerButtonState();
 }
 
 class _DatePickerButtonState extends State<DatePickerButton> {
-  DateTime date = DateTime.now();
+  late DateTime initialDate;
+  @override
+  void initState() {
+    initialDate = widget.initialDate ?? DateTime.now();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +30,12 @@ class _DatePickerButtonState extends State<DatePickerButton> {
     return InkWell(
       onTap: () async {
         DateTime dateTime = await floatingCalendarWidget(
-          context,
-          initialDate: date,
+          context: context,
+          initialDate: initialDate,
         );
 
         setState(() {
-          date = dateTime;
+          initialDate = dateTime;
         });
         widget.onChangeDate(dateTime);
       },
@@ -40,7 +51,7 @@ class _DatePickerButtonState extends State<DatePickerButton> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                DateFormat('MMMM d, y').format(date),
+                DateFormat('MMMM d, y').format(initialDate),
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 11,
@@ -59,51 +70,5 @@ class _DatePickerButtonState extends State<DatePickerButton> {
         ),
       ),
     );
-  }
-
-  floatingCalendarWidget(BuildContext context, {required initialDate}) async {
-    ThemeData theme = Theme.of(context);
-    var value = await showDatePicker(
-      context: context,
-      initialDate: initialDate,
-      firstDate: DateTime(1950),
-      lastDate: DateTime(2050),
-      builder: (context, child) => Theme(
-        data: ThemeData().copyWith(
-          colorScheme: ColorScheme.light(
-            primary: theme.primaryColor,
-            secondary: theme.colorScheme.secondary,
-          ),
-        ),
-        child: child!,
-      ),
-    ).then((value) => value);
-    TimeOfDay? time;
-    if (value != null) {
-      time = await timePickerWidget(context);
-    }
-    time ??= TimeOfDay.now();
-    DateTime dateTime = value ?? DateTime.now();
-    // DateTime dateTime = value != null
-    //     ? DateTime(value.year, value.month, value.day, time.hour, time.minute)
-    //     : DateTime.now();
-    return dateTime;
-  }
-
-  timePickerWidget(BuildContext context) {
-    var value = showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-      builder: (context, child) => Theme(
-        data: ThemeData().copyWith(
-          colorScheme: ColorScheme.light(
-            primary: Theme.of(context).primaryColor,
-            secondary: Theme.of(context).colorScheme.secondary,
-          ),
-        ),
-        child: child!,
-      ),
-    ).then((value) => value);
-    return value;
   }
 }
