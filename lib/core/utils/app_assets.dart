@@ -1,4 +1,5 @@
 import 'package:flutter_svg/svg.dart';
+import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/status_button.dart';
 
 class AppAssets {
   static const String google = 'assets/images/google.png';
@@ -78,4 +79,15 @@ class AppAssets {
   );
   static const String calendar = 'assets/images/svgs/calendar.svg';
   static final SvgPicture svgCalendar = SvgPicture.asset(calendar);
+
+  static SvgPicture statusToSvg(status) {
+    return switch (status) {
+      Status.angry || 'angry' => svgAngry,
+      Status.happy || 'happy' => svgHappy,
+      Status.sad || 'sad' => svgSad,
+      Status.normal || 'normal' => svgNormal,
+      Status.smile || 'smile' => svgSmile,
+      _ => svgSmile,
+    };
+  }
 }

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/custom_child_fab.dart';
 
 enum Status { angry, happy, sad, normal, smile }
 
 class StatusButton extends StatefulWidget {
-  const StatusButton({super.key});
+  final Function(Status status) onPressed;
+
+  const StatusButton({super.key, required this.onPressed});
 
   @override
   State<StatusButton> createState() => _StatusButtonState();
@@ -19,13 +20,7 @@ class _StatusButtonState extends State<StatusButton> {
   Widget build(BuildContext context) {
     return CustomChildFab(
       heroTag: 'btn4',
-      child: switch (status) {
-        Status.angry => AppAssets.svgAngry,
-        Status.happy => AppAssets.svgHappy,
-        Status.sad => AppAssets.svgSad,
-        Status.normal => AppAssets.svgNormal,
-        Status.smile => AppAssets.svgSmile,
-      },
+      child: AppAssets.statusToSvg(status),
       onPressed: () {
         onStatusBtnPressed(context: context);
       },
@@ -44,6 +39,7 @@ class _StatusButtonState extends State<StatusButton> {
                 widget: AppAssets.svgHappy,
                 onTap: () {
                   status = Status.happy;
+                  widget.onPressed(status);
                   setState(() {});
                 },
               ),
@@ -51,6 +47,7 @@ class _StatusButtonState extends State<StatusButton> {
                 widget: AppAssets.svgNormal,
                 onTap: () {
                   status = Status.normal;
+                  widget.onPressed(status);
                   setState(() {});
                 },
               ),
@@ -58,6 +55,7 @@ class _StatusButtonState extends State<StatusButton> {
                 widget: AppAssets.svgAngry,
                 onTap: () {
                   status = Status.angry;
+                  widget.onPressed(status);
                   setState(() {});
                 },
               ),
@@ -65,6 +63,7 @@ class _StatusButtonState extends State<StatusButton> {
                 widget: AppAssets.svgSad,
                 onTap: () {
                   status = Status.sad;
+                  widget.onPressed(status);
                   setState(() {});
                 },
               ),

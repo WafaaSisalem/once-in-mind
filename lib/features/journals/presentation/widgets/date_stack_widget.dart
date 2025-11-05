@@ -40,7 +40,7 @@ class DateStackWidget extends StatelessWidget {
                 width: 103,
                 text: DateFormat('EEEE. hh:mm a').format(journal.date),
               ),
-              statusContainer(),
+              statusContainer(journal.status),
             ],
           ),
         ),
@@ -48,7 +48,7 @@ class DateStackWidget extends StatelessWidget {
     );
   }
 
-  Container statusContainer() {
+  Container statusContainer(String status) {
     return Container(
       width: 30,
       height: 30,
@@ -63,7 +63,7 @@ class DateStackWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
         color: Colors.white, //
       ),
-      child: Center(child: AppAssets.svgSmile), //not real status
+      child: Center(child: AppAssets.statusToSvg(status)),
     );
   }
 

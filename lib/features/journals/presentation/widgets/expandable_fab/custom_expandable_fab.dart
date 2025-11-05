@@ -5,11 +5,12 @@ import 'package:onceinmind/features/home/presentation/widgets/fab_widget.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/status_button.dart';
 
 class CustomExpandableFab extends StatelessWidget {
-  CustomExpandableFab({super.key});
+  final Function(Status status) onStatusPressed;
+
+  const CustomExpandableFab({super.key, required this.onStatusPressed});
 
   @override
   Widget build(BuildContext context) {
-    print('customexpafa');
     final theme = Theme.of(context);
     return ExpandableFab(
       initialOpen: true,
@@ -19,7 +20,11 @@ class CustomExpandableFab extends StatelessWidget {
         buildGalleryBtn(),
         buildMapBtn(),
         buildWeatherBtn(theme),
-        StatusButton(),
+        StatusButton(
+          onPressed: (status) {
+            onStatusPressed(status);
+          },
+        ),
       ],
     );
   }

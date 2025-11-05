@@ -8,6 +8,7 @@ import 'package:onceinmind/features/journals/data/models/journal_model.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/journals_cubit.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/custom_expandable_fab.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/date_picker_button.dart';
+import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/status_button.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/writing_area.dart';
 
 class AddJournalPage extends StatefulWidget {
@@ -19,7 +20,7 @@ class AddJournalPage extends StatefulWidget {
 
 class _AddJournalPageState extends State<AddJournalPage> {
   final TextEditingController controller = TextEditingController();
-
+  Status status = Status.smile;
   DateTime date = DateTime.now();
 
   @override
@@ -62,14 +63,17 @@ class _AddJournalPageState extends State<AddJournalPage> {
         child: WritingArea(controller: controller),
       ),
       floatingActionButtonLocation: ExpandableFab.location,
-      floatingActionButton: CustomExpandableFab(),
+      floatingActionButton: CustomExpandableFab(
+        onStatusPressed: (status) {
+          this.status = status;
+        },
+      ),
     );
   }
 
   void saveJournal(BuildContext context) {
     final content = controller.text.trim();
     if (content.isEmpty) return;
-
     final journal = JournalModel(
       id: DateTime.now().toString(), // استخدام الوقت كـ ID
       content: content,
@@ -77,6 +81,7 @@ class _AddJournalPageState extends State<AddJournalPage> {
       imagesUrls: [],
       isLocked: false,
       location: null,
+      status: status.name,
     );
 
     final cubit = context.read<JournalsCubit>();
