@@ -25,15 +25,15 @@ class CustomSliderWidget extends StatelessWidget {
       indicatorColor: Colors.white,
       indicatorBackgroundColor: Colors.grey.withOpacity(0.5),
       onPageChanged: (value) => onPageChanged(value),
-      children: journal.imagesUrls
+      children: journal.signedUrls!
           .map(
-            (imageUrl) => InkWell(
+            (signedUrl) => InkWell(
               onTap: onTap,
               child: Hero(
                 tag: journal.id,
                 child: CachedNetworkImage(
                   fit: imageFit,
-                  imageUrl: imageUrl,
+                  imageUrl: signedUrl,
                   placeholder: (context, url) =>
                       Container(color: Colors.black12),
                   errorWidget: (context, url, error) => const Icon(Icons.error),

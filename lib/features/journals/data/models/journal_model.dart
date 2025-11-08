@@ -5,7 +5,7 @@ import 'package:onceinmind/core/constants/app_keys.dart';
 import 'package:onceinmind/features/location/data/models/location_model.dart';
 
 class JournalModel extends Equatable {
-  const JournalModel({
+  JournalModel({
     required this.id,
     required this.content,
     required this.date,
@@ -14,6 +14,7 @@ class JournalModel extends Equatable {
     this.weather = '',
     this.imagesUrls = const [],
     this.status = '',
+    this.signedUrls,
   });
 
   final String id; //the id is datetime.now
@@ -24,6 +25,7 @@ class JournalModel extends Equatable {
   final LocationModel? location;
   final List<dynamic> imagesUrls;
   final String status;
+  List<String>? signedUrls;
 
   // get formatedDate {
   //   return DateFormat(AppStrings.dateFormat).format(date);

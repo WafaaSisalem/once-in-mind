@@ -1,72 +1,79 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_calendar_carousel/classes/event.dart';
-import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:onceinmind/features/auth/data/repositories/auth_repository.dart';
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
 import 'package:onceinmind/features/journals/data/repositories/journal_repository.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/journals_state.dart';
+import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/status_button.dart';
+import 'package:onceinmind/services/media/supabase_storage_service.dart';
 
 class JournalsCubit extends Cubit<JournalsState> {
   final JournalRepository _journalRepository;
   final AuthRepository _authRepository;
+  final SupabaseStorageService _storageService = SupabaseStorageService();
   JournalsCubit(this._journalRepository, this._authRepository)
     : super(JournalsInitial());
   get userId => _authRepository.currentUser?.uid;
 
-  // EventList<Event> get calendarEvents {
-  //   if (state is! JournalsLoaded) return EventList<Event>(events: {});
-  //   final journals = (state as JournalsLoaded).journals;
-  //   return EventList<Event>(
-  //     events: {
-  //       for (final journal in journals)
-  //         journal.date: [Event(date: journal.date, title: journal.id)],
-  //     },
-  //   );
-  // }
-
-  // List<JournalModel> getJournalsByDate(DateTime date) {
-  //   if (state is JournalsLoaded) {
-  //     final journals = (state as JournalsLoaded).journals;
-  //     return journals.where((journal) {
-  //       return isSameDate(journal.date, date);
-  //     }).toList();
-  //   }
-  //   return [];
-  // }
-
-  // bool isSameDate(DateTime a, DateTime b) {
-  //   return a.year == b.year && a.month == b.month && a.day == b.day;
-  // }
-
   Future<void> fetchJournals() async {
     if (state is JournalsLoaded || state is JournalsLoading) return;
     emit(JournalsLoading());
+
     try {
       final List<JournalModel> journals = await _journalRepository
           .getAllJournals(userId);
-      print('gettings jouranl');
+
+      for (var journal in journals) {
+        if (journal.imagesUrls.isNotEmpty) {
+          final signedUrls = await _storageService.getSignedUrlsFromPaths(
+            journal.imagesUrls,
+          );
+
+          journal.signedUrls = signedUrls;
+        }
+      }
+
       emit(JournalsLoaded(journals));
     } catch (e) {
       emit(JournalsError(e.toString()));
     }
   }
 
-  Future<void> addJournal(JournalModel journal) async {
+  Future<void> saveJournal({
+    required String content,
+    required DateTime date,
+    required Status status,
+    required List<File> files,
+  }) async {
     try {
+      emit(JournalsLoading());
+
+      List<String> imagePaths = [];
+
+      if (files.isNotEmpty) {
+        imagePaths = await _storageService.uploadImageAndGetPaths(
+          files,
+          userId,
+        );
+      }
+
+      final journal = JournalModel(
+        id: DateTime.now().toString(),
+        content: content,
+        date: date,
+        imagesUrls: imagePaths,
+        isLocked: false,
+        location: null,
+        status: status.name,
+      );
+
       await _journalRepository.addJournal(userId, journal);
-      emit(
-        JournalsInitial(),
-      ); //حسب لوجيك الفيتش ما رح تعمل فيتش الا اذا ايرور او انيشيال
+
+      emit(JournalsInitial());
       await fetchJournals();
-      // ما ضفت عالجورنال الي عنا  لوكالي، لانه ممكن احيانا نختار تاريخ غير ففضلت ياخد البيانات مرتبة بتاريخها من ال الفيرستور
-      // if (state is JournalsLoaded) {
-      //   final currentJournals = (state as JournalsLoaded).journals;
-      //   emit(JournalsLoaded([journal, ...currentJournals]));
-      // } else {
-      //   await fetchJournals();
-      // }
     } catch (e) {
-      emit(JournalsError('Failed to add journal'));
+      emit(JournalsError('Failed to save journal: $e'));
     }
   }
 

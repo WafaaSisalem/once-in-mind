@@ -1,0 +1,70 @@
+// import 'dart:io';
+// import 'package:supabase_flutter/supabase_flutter.dart';
+
+// class SupabaseStorageService {
+//   final _supabase = Supabase.instance.client;
+
+//   Future<List<String>> uploadImageAndGetUrls(
+//     List<File> files,
+//     String userId,
+//   ) async {
+//     List<String> imagesUrls = [];
+//     for (File file in files) {
+//       final fileName =
+//           '${DateTime.now().millisecondsSinceEpoch}_${file.path.split('/').last}';
+//       final String path = 'images/$userId/$fileName';
+//       await _supabase.storage.from('journal-images').upload(path, file);
+//       final publicUrl = _supabase.storage
+//           .from('journal-images')
+//           .getPublicUrl(path);
+//       imagesUrls.add(publicUrl);
+//     }
+//     return imagesUrls;
+//   }
+// }
+import 'dart:io';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+class SupabaseStorageService {
+  final _supabase = Supabase.instance.client;
+
+  Future<List<String>> uploadImageAndGetPaths(
+    List<File> files,
+    String userId,
+  ) async {
+    List<String> paths = [];
+
+    for (File file in files) {
+      final fileName =
+          '${DateTime.now().millisecondsSinceEpoch}_${file.path.split('/').last}';
+      final String path = 'images/$userId/$fileName';
+
+      try {
+        await _supabase.storage.from('journal-images').upload(path, file);
+        print('✅ Uploaded: $path');
+
+        paths.add(path);
+      } catch (e) {
+        print('❌ Error uploading or creating signed URL for $path: $e');
+      }
+    }
+
+    return paths;
+  }
+
+  Future<List<String>> getSignedUrlsFromPaths(List<dynamic> paths) async {
+    final storage = _supabase.storage.from('journal-images');
+    List<String> signedUrls = [];
+
+    for (var path in paths) {
+      try {
+        final signedUrl = await storage.createSignedUrl(path, 3600);
+        signedUrls.add(signedUrl);
+      } catch (e) {
+        print('❌ Error creating signed URL for $path: $e');
+      }
+    }
+
+    return signedUrls;
+  }
+}

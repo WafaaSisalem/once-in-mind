@@ -11,7 +11,7 @@ class AuthCubit extends Cubit<AuthState> {
             ? AuthSignedIn(_authRepository.currentUser!)
             : AuthSignedOut(),
       );
-
+  getCurrentUser() => _authRepository.currentUser;
   Future<void> signIn(String email, String password) async {
     await _authenticate(email, password, isSignUp: false);
   }

@@ -24,6 +24,9 @@ class JournalItem extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 12),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
         child: ListTile(
+          leading: (journal.signedUrls?.isNotEmpty ?? false)
+              ? Image.network(journal.signedUrls!.first)
+              : null,
           title: Text(
             journal.content,
             maxLines: 3,

@@ -1,13 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
 import 'package:onceinmind/features/home/presentation/widgets/fab_widget.dart';
+import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/gallery_button.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/status_button.dart';
 
 class CustomExpandableFab extends StatelessWidget {
-  final Function(Status status) onStatusPressed;
-
-  const CustomExpandableFab({super.key, required this.onStatusPressed});
+  final Function(Status status) onStatusChanged;
+  final Function(List<File> urls) onImageSelected;
+  const CustomExpandableFab({
+    super.key,
+    required this.onStatusChanged,
+    required this.onImageSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +24,17 @@ class CustomExpandableFab extends StatelessWidget {
       openButtonBuilder: buildOpenBtn(), //Done
       closeButtonBuilder: buildCloseBtn(), // Done
       children: [
-        buildGalleryBtn(),
+        GalleryButton(
+          onPressed: (files) {
+            onImageSelected(files);
+          },
+        ),
+        // buildGalleryBtn(),
         buildMapBtn(),
         buildWeatherBtn(theme),
         StatusButton(
           onPressed: (status) {
-            onStatusPressed(status);
+            onStatusChanged(status);
           },
         ),
       ],
@@ -62,33 +74,6 @@ class CustomExpandableFab extends StatelessWidget {
       child: AppAssets.svgMap,
       // child: journalProvider.location == null ? AppAssets.svgMap:AppAssets. svgMapDone,
       onPressed: () {},
-    );
-  }
-
-  FloatingActionButton buildGalleryBtn() {
-    return FloatingActionButton(
-      shape: const CircleBorder(),
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      heroTag: 'btn1',
-      backgroundColor: Colors.white,
-      child: AppAssets.svgGallery,
-      // child: journalProvider
-      //         .pickedImages.isEmpty // journalProvider.filesPicked.isEmpty
-      //     ?AppAssets. svgGallery
-      //     : SizedBox(
-      //         width: double.infinity,
-      //         height: double.infinity,
-
-      //         child: journalProvider.pickedImages[0],
-
-      //         // child: Image.file(
-      //         //   journalProvider.filesPicked[0],
-      //         //   fit: BoxFit.cover,
-      //         // ),
-      //       ),
-      onPressed: () {
-        //  onGalleryBtnPressed();
-      },
     );
   }
 

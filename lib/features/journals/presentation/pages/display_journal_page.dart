@@ -79,7 +79,7 @@ class _DisplayJournalPageState extends State<DisplayJournalPage> {
         padding: const EdgeInsets.only(left: 30, right: 30, top: 20),
         child: Column(
           children: [
-            if (_journal.imagesUrls.isNotEmpty)
+            if (_journal.signedUrls?.isNotEmpty ?? false)
               InlineSliderWidget(journal: _journal),
 
             DateStackWidget(journal: _journal),
