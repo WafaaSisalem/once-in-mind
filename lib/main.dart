@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:onceinmind/core/config/router.dart';
 import 'package:onceinmind/core/config/theme.dart';
@@ -19,10 +22,11 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FlutterNativeSplash.remove();
+  await dotenv.load(fileName: ".env");
+
   await Supabase.initialize(
-    url: 'https://loadxhdwkmzzuwnuvqwn.supabase.co',
-    anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxvYWR4aGR3a216enV3bnV2cXduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIzNzcyNjAsImV4cCI6MjA3Nzk1MzI2MH0.eU0YDsexoHW2fDy4Dj58dh6N12NepDOZOSVHQWEdF-o',
+    url: dotenv.env['SUPABASE_URL']!,
+    anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
   );
   runApp(MyApp());
 }

@@ -1,27 +1,3 @@
-// import 'dart:io';
-// import 'package:supabase_flutter/supabase_flutter.dart';
-
-// class SupabaseStorageService {
-//   final _supabase = Supabase.instance.client;
-
-//   Future<List<String>> uploadImageAndGetUrls(
-//     List<File> files,
-//     String userId,
-//   ) async {
-//     List<String> imagesUrls = [];
-//     for (File file in files) {
-//       final fileName =
-//           '${DateTime.now().millisecondsSinceEpoch}_${file.path.split('/').last}';
-//       final String path = 'images/$userId/$fileName';
-//       await _supabase.storage.from('journal-images').upload(path, file);
-//       final publicUrl = _supabase.storage
-//           .from('journal-images')
-//           .getPublicUrl(path);
-//       imagesUrls.add(publicUrl);
-//     }
-//     return imagesUrls;
-//   }
-// }
 import 'dart:io';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

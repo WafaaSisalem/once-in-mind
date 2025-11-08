@@ -27,6 +27,7 @@ dependencies:
   flutter_expandable_fab: ^2.5.2
   supabase_flutter: ^2.10.3
   image_picker: ^1.2.0
+  flutter_dotenv: ^6.0.0
 
 dev_dependencies:
   flutter_test:
@@ -36,6 +37,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - .env
     - assets/images/
     - assets/fonts/
     - assets/images/svgs/

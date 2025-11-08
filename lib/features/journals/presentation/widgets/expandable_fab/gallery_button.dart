@@ -1,12 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
-import 'package:onceinmind/features/auth/presentation/cubits/auth/auth_cubit.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/custom_child_fab.dart';
-import 'package:onceinmind/services/media/supabase_storage_service.dart';
 
 class GalleryButton extends StatelessWidget {
   final Function(List<File> urls) onPressed;
