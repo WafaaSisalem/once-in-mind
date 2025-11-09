@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
+import 'package:onceinmind/core/utils/status_enum.dart';
 import 'package:onceinmind/features/home/presentation/widgets/fab_widget.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/gallery_button.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/status_button.dart';

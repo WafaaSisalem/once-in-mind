@@ -14,6 +14,7 @@ import 'package:onceinmind/features/journals/presentation/pages/add_journal_page
 import 'package:onceinmind/features/journals/presentation/pages/display_journal_page.dart';
 import 'package:onceinmind/features/journals/presentation/pages/edit_journal_page.dart';
 import 'package:onceinmind/features/journals/presentation/pages/image_viewer_page.dart';
+import 'package:onceinmind/features/journals/presentation/pages/journal_editor_page.dart';
 import 'package:onceinmind/features/location/data/models/location_model.dart';
 
 class AppRouter {
@@ -59,7 +60,10 @@ class AppRouter {
           GoRoute(
             path: AppRoutes.addJournal,
             name: AppRoutes.addJournal,
-            builder: (context, state) => AddJournalPage(),
+            builder: (context, state) => JournalEditorPage(),
+            // builder: (context, state) => AddJournalPage(),
+            // path: AppRoutes.addJournal,
+            // name: AppRoutes.addJournal,
           ),
 
           //display journal Screen
@@ -72,7 +76,9 @@ class AppRouter {
                 path: AppRoutes.editJournal,
                 name: AppRoutes.editJournal,
                 builder: (context, state) =>
-                    EditJournalPage(journal: state.extra as JournalModel),
+                    JournalEditorPage(journal: state.extra as JournalModel),
+                // builder: (context, state) =>
+                //     EditJournalPage(journal: state.extra as JournalModel),
               ),
               GoRoute(
                 path: AppRoutes.imageViewerPage,

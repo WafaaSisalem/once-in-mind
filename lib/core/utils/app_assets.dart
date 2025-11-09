@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/status_button.dart';
+import 'package:onceinmind/core/utils/status_enum.dart';
 
 class AppAssets {
   static const String google = 'assets/images/google.png';

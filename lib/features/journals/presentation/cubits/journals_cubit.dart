@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:onceinmind/core/utils/status_enum.dart';
 import 'package:onceinmind/features/auth/data/repositories/auth_repository.dart';
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
 import 'package:onceinmind/features/journals/data/repositories/journal_repository.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/journals_state.dart';
-import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/status_button.dart';
 import 'package:onceinmind/services/media/supabase_storage_service.dart';
 
 class JournalsCubit extends Cubit<JournalsState> {

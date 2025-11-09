@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
+import 'package:onceinmind/core/utils/status_enum.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/custom_child_fab.dart';
-
-enum Status { angry, happy, sad, normal, smile }
 
 class StatusButton extends StatefulWidget {
   final Function(Status status) onPressed;
