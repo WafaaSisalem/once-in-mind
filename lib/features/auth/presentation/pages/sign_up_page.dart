@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onceinmind/core/config/router.dart';
 import 'package:onceinmind/core/constants/app_routes.dart';
-import 'package:onceinmind/core/widgets/toast.dart';
+import 'package:onceinmind/core/utils/toast.dart';
 import 'package:onceinmind/features/auth/data/models/user_model.dart';
 import 'package:onceinmind/features/auth/presentation/cubits/auth/auth_cubit.dart';
 import 'package:onceinmind/features/auth/presentation/cubits/auth/auth_state.dart';

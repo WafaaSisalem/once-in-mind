@@ -1,12 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
+import 'package:onceinmind/core/utils/image_picker_utils.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/custom_child_fab.dart';
+import 'package:onceinmind/features/journals/presentation/widgets/pick_image_widget.dart';
 
 class GalleryButton extends StatefulWidget {
-  final Function(List<File> urls) onPressed;
+  final Function(List<File> selectedFiles) onPressed;
 
   const GalleryButton({super.key, required this.onPressed});
 
@@ -29,27 +30,20 @@ class _GalleryButtonState extends State<GalleryButton> {
               child: Image.file(selectedFile.first, fit: BoxFit.cover),
             ),
       onPressed: () async {
-        selectedFile = await pickImage();
-        setState(() {});
-        if (selectedFile.isNotEmpty) {
-          widget.onPressed(selectedFile);
+        if (selectedFile.isEmpty) {
+          selectedFile = await pickImage();
+        } else {
+          selectedFile = await showDialog(
+            context: context,
+            builder: (ctx) {
+              return PickImageWidget(selectedFiles: selectedFile);
+            },
+          );
         }
+        widget.onPressed(selectedFile);
+
+        setState(() {});
       },
     );
-  }
-
-  Future<List<File>> pickImage() async {
-    final ImagePicker imagePicker = ImagePicker();
-
-    List<XFile>? imageFileList = [];
-
-    final List<XFile> selectedImages = await imagePicker.pickMultiImage(
-      imageQuality: 25,
-    );
-    if (selectedImages.isNotEmpty) {
-      imageFileList.addAll(selectedImages);
-    }
-    List<File> files = imageFileList.map((file) => File(file.path)).toList();
-    return files;
   }
 }

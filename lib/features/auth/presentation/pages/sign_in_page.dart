@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:onceinmind/core/config/theme.dart';
 import 'package:onceinmind/core/constants/app_routes.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
-import 'package:onceinmind/core/widgets/toast.dart';
+import 'package:onceinmind/core/utils/toast.dart';
 import 'package:onceinmind/features/auth/presentation/cubits/auth/auth_cubit.dart';
 import 'package:onceinmind/features/auth/presentation/cubits/auth/auth_state.dart';
 import 'package:onceinmind/features/auth/presentation/cubits/user/user_cubit.dart';

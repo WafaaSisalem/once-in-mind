@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:onceinmind/core/widgets/toast.dart';
+import 'package:onceinmind/core/utils/toast.dart';
 import 'package:onceinmind/features/auth/presentation/widgets/form_text_field.dart';
 
 class RegistrationForm extends StatelessWidget {
