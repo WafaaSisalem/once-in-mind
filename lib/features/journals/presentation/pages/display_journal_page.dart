@@ -36,6 +36,7 @@ class _DisplayJournalPageState extends State<DisplayJournalPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('DisplayJournalPage rebuilt');
     return Scaffold(
       appBar: AppbarWidget(
         titlePlace: CustomBackButton(),

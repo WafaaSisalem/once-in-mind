@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:intl/intl.dart';
 import 'package:onceinmind/core/constants/app_keys.dart';
 import 'package:onceinmind/features/location/data/models/location_model.dart';
 

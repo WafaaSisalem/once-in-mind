@@ -27,7 +27,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("building home view");
+    print('HomeView rebuilt');
     return BlocBuilder<TabsCubit, int>(
       builder: (context, currentIndex) {
         return Scaffold(

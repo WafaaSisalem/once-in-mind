@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:onceinmind/core/constants/app_routes.dart';
-import 'package:onceinmind/core/utils/type_defs.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
+import 'package:onceinmind/features/journals/presentation/cubits/image_slider_cubit.dart';
+import 'package:onceinmind/features/journals/presentation/pages/image_viewer_page.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/custom_slider_widget.dart';
 
 class InlineSliderWidget extends StatelessWidget {
   final JournalModel journal;
-  InlineSliderWidget({super.key, required this.journal});
-  int currentIndex = 0;
+  const InlineSliderWidget({super.key, required this.journal});
 
   @override
   Widget build(BuildContext context) {
@@ -27,19 +26,27 @@ class InlineSliderWidget extends StatelessWidget {
         ],
         borderRadius: BorderRadius.circular(5),
       ),
-      child: CustomSliderWidget(
-        onPageChanged: (value) {
-          currentIndex = value;
-        },
-        journal: journal,
-        onTap: () async {
-          ImageInSlider extras = (journal: journal, initialIndex: currentIndex);
-          currentIndex =
-              await context.pushNamed<int?>(
-                AppRoutes.imageViewerPage,
-                extra: extras,
-              ) ??
-              currentIndex;
+      child: BlocBuilder<ImageSliderCubit, int>(
+        builder: (context, state) {
+          print(' InlineSlider rebuilt');
+
+          return CustomSliderWidget(
+            initialPage: state,
+            onPageChanged: (value) {
+              context.read<ImageSliderCubit>().setCurrentIndex(value);
+            },
+            journal: journal,
+            onTap: () {
+              // context.pushNamed(AppRoutes.imageViewerPage, extra: journal);
+              // Use Navigator.push to avoid parent route rebuild
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ImageViewerPage(journal: journal),
+                  fullscreenDialog: true,
+                ),
+              );
+            },
+          );
         },
       ),
     );

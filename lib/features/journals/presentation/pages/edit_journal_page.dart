@@ -35,6 +35,7 @@ class _EditJournalPageState extends State<EditJournalPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('EditJournalPage rebuilt');
     return Scaffold(
       appBar: AppbarWidget(
         titlePlace: Row(
