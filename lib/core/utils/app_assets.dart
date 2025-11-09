@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/status_button.dart';
 
@@ -51,7 +52,9 @@ class AppAssets {
       'assets/images/svgs/white_unlock_icon.svg';
   static final SvgPicture svgWhiteUnlock = SvgPicture.asset(whiteUnlockIcon);
   static const String gallery = 'assets/images/svgs/gallery.svg';
-  static final SvgPicture svgGallery = SvgPicture.asset(gallery);
+  // static final SvgPicture svgGallery = SvgPicture.asset(gallery);
+  static Widget get svgGallery => SvgPicture.asset(gallery);
+
   static const String map = 'assets/images/svgs/map.svg';
   static final SvgPicture svgMap = SvgPicture.asset(map);
   static const String mapDoneIcon = 'assets/images/svgs/mapdone.svg';

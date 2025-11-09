@@ -5,20 +5,34 @@ import 'package:image_picker/image_picker.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/custom_child_fab.dart';
 
-class GalleryButton extends StatelessWidget {
+class GalleryButton extends StatefulWidget {
   final Function(List<File> urls) onPressed;
+
   const GalleryButton({super.key, required this.onPressed});
+
+  @override
+  State<GalleryButton> createState() => _GalleryButtonState();
+}
+
+class _GalleryButtonState extends State<GalleryButton> {
+  List<File> selectedFile = [];
 
   @override
   Widget build(BuildContext context) {
     return CustomChildFab(
       heroTag: 'btn1',
-      child: AppAssets.svgGallery,
+      child: selectedFile.isEmpty
+          ? AppAssets.svgGallery
+          : SizedBox(
+              width: double.infinity,
+              height: double.infinity,
+              child: Image.file(selectedFile.first, fit: BoxFit.cover),
+            ),
       onPressed: () async {
-        final selectedFile = await pickImage();
-
+        selectedFile = await pickImage();
+        setState(() {});
         if (selectedFile.isNotEmpty) {
-          onPressed(selectedFile);
+          widget.onPressed(selectedFile);
         }
       },
     );

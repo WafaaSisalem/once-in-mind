@@ -20,7 +20,11 @@ class _StatusButtonState extends State<StatusButton> {
   Widget build(BuildContext context) {
     return CustomChildFab(
       heroTag: 'btn4',
-      child: AppAssets.statusToSvg(status),
+      child: SizedBox(
+        width: 22,
+        height: 22,
+        child: AppAssets.statusToSvg(status),
+      ),
       onPressed: () {
         onStatusBtnPressed(context: context);
       },

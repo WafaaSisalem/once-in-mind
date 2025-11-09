@@ -18,6 +18,7 @@ class CustomExpandableFab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('CustomExpandableFab rebuilt');
     final theme = Theme.of(context);
     return ExpandableFab(
       initialOpen: true,
@@ -29,7 +30,6 @@ class CustomExpandableFab extends StatelessWidget {
             onImageSelected(files);
           },
         ),
-        // buildGalleryBtn(),
         buildMapBtn(),
         buildWeatherBtn(theme),
         StatusButton(
@@ -88,35 +88,6 @@ class CustomExpandableFab extends StatelessWidget {
     );
   }
 
-  //  onGalleryBtnPressed() async {
-  //     if (journalProvider.pickedImages.isEmpty) {
-  //       List<File> files = await journalProvider
-  //           .selectFiles(); //THIS METHOD ADDS FILES TO pickedImages in provider
-  //       pickedFiles.addAll(files);
-  //       setState(() {});
-  //     } else {
-  //       showDialog(
-  //           context: context,
-  //           builder: (ctx) {
-  //             return Consumer<JournalProvider>(
-  //                 builder: (context, journalProviderIn, x) {
-  //               return PickImageWidget(
-  //                   images: journalProviderIn.pickedImages,
-  //                   onRemovePressed: (index) {
-  //                     journalProviderIn.removeImageAt(index);
-  //                     pickedFiles.removeAt(index);
-  //                   },
-  //                   onAddImagePressed: (files) {
-  //                     journalProviderIn.addImages(files);
-  //                     pickedFiles.addAll(files);
-  //                   },
-  //                   onDonePressed: (files) {
-  //                     context.pop();
-  //                   });
-  //             });
-  //           });
-  //     }
-  //   }
   FloatingActionButtonBuilder buildOpenBtn() {
     return FloatingActionButtonBuilder(
       builder: (context, onPressed, progress) =>
