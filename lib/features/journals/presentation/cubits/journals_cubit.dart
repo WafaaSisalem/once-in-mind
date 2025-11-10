@@ -87,10 +87,10 @@ class JournalsCubit extends Cubit<JournalsState> {
         final updatedList = currentJournals
             .map((j) => j.id == journal.id ? journal : j)
             .toList();
+        //order by date
+        updatedList.sort((a, b) => b.date.compareTo(a.date));
 
         emit(JournalsLoaded(updatedList));
-      } else {
-        await fetchJournals();
       }
     } catch (e) {
       emit(JournalsError('Failed to update journal'));
@@ -107,8 +107,6 @@ class JournalsCubit extends Cubit<JournalsState> {
             currentJournals.where((j) => j.id != journalId).toList(),
           ),
         );
-      } else {
-        await fetchJournals();
       }
     } catch (e) {
       emit(JournalsError('Failed to delete journal'));

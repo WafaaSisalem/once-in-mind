@@ -78,7 +78,7 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
         padding: const EdgeInsets.only(left: 30, right: 30, top: 20),
         child: WritingArea(controller: controller),
       ),
-      // floatingActionButtonLocation: ExpandableFab.location,
+      floatingActionButtonLocation: ExpandableFab.location,
       // floatingActionButton: CustomExpandableFab(
       //   onImageSelected: (files) async {
       //     selectedFiles = files;
@@ -97,6 +97,7 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
 
       return;
     }
+    // update existing journal
     if (widget.journal != null) {
       final updatedJournal = widget.journal!.copyWith(
         content: content,
@@ -108,6 +109,7 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
 
       context.pop(updatedJournal);
     } else {
+      // add new journal
       context.read<JournalsCubit>().saveJournal(
         content: content,
         date: date,
