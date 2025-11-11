@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onceinmind/core/constants/app_routes.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
 import 'package:onceinmind/core/widgets/appbar_widget.dart';
 import 'package:onceinmind/core/widgets/custom_back_button.dart';
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
+import 'package:onceinmind/features/journals/presentation/cubits/image_slider_cubit.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/date_stack_widget.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/inline_slider_widget.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/writing_area.dart';
@@ -26,6 +28,12 @@ class _DisplayJournalPageState extends State<DisplayJournalPage> {
     _journal = widget
         .journal; // لانه ممكن اليوزر يروح عصفحة تعديل الجورنال وهذا التعديل رح ينعكس عالصفحة عندي
     _controller = TextEditingController(text: _journal.content);
+    // Reset slider to index 0 when opening a new journal
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<ImageSliderCubit>().setCurrentIndex(0);
+      }
+    });
   }
 
   @override

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
@@ -8,6 +6,7 @@ import 'package:onceinmind/core/utils/status_enum.dart';
 import 'package:onceinmind/core/widgets/appbar_widget.dart';
 import 'package:onceinmind/core/widgets/custom_back_button.dart';
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
+import 'package:onceinmind/features/journals/data/models/journal_attachment.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/journals_cubit.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/custom_expandable_fab.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/date_picker_button.dart';
@@ -26,7 +25,8 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
   TextEditingController controller = TextEditingController();
   Status status = Status.smile;
   DateTime date = DateTime.now();
-  List<File> selectedFiles = [];
+  List<JournalAttachment> attachments = [];
+  List<String> originalRemotePaths = [];
 
   @override
   void dispose() {
@@ -41,6 +41,17 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
       controller = TextEditingController(text: widget.journal!.content);
       date = widget.journal!.date;
       status = stringToStatus(widget.journal!.status);
+      final journal = widget.journal!;
+      final paths = journal.imagesUrls.map((e) => e.toString()).toList();
+      originalRemotePaths = List<String>.from(paths);
+      final signedUrls = journal.signedUrls ?? [];
+      attachments = List.generate(
+        paths.length,
+        (index) => JournalAttachment.remote(
+          storagePath: paths[index],
+          signedUrl: index < signedUrls.length ? signedUrls[index] : null,
+        ),
+      );
     }
   }
 
@@ -79,14 +90,15 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
         child: WritingArea(controller: controller),
       ),
       floatingActionButtonLocation: ExpandableFab.location,
-      // floatingActionButton: CustomExpandableFab(
-      //   onImageSelected: (files) async {
-      //     selectedFiles = files;
-      //   },
-      //   onStatusChanged: (status) {
-      //     this.status = status;
-      //   },
-      // ),
+      floatingActionButton: CustomExpandableFab(
+        attachments: attachments,
+        onImageSelected: (newAttachments) async {
+          attachments = List<JournalAttachment>.from(newAttachments);
+        },
+        onStatusChanged: (status) {
+          this.status = status;
+        },
+      ),
     );
   }
 
@@ -99,13 +111,17 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
     }
     // update existing journal
     if (widget.journal != null) {
-      final updatedJournal = widget.journal!.copyWith(
+      final baseJournal = widget.journal!.copyWith(
         content: content,
         date: date,
         status: status.name,
       );
       final cubit = context.read<JournalsCubit>();
-      cubit.updateJournal(updatedJournal);
+      final updatedJournal = await cubit.updateJournalWithAttachments(
+        journal: baseJournal,
+        attachments: attachments,
+        originalRemotePaths: originalRemotePaths,
+      );
 
       context.pop(updatedJournal);
     } else {
@@ -114,7 +130,7 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
         content: content,
         date: date,
         status: status,
-        files: selectedFiles,
+        attachments: attachments,
       );
 
       context.pop();

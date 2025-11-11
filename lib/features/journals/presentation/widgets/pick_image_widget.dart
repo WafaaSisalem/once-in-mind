@@ -1,22 +1,22 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
 import 'package:onceinmind/core/utils/image_picker_utils.dart';
+import 'package:onceinmind/features/journals/data/models/journal_attachment.dart';
 
 class PickImageWidget extends StatefulWidget {
-  final List<File> selectedFiles;
-  const PickImageWidget({super.key, required this.selectedFiles});
+  final List<JournalAttachment> selectedAttachments;
+  const PickImageWidget({super.key, required this.selectedAttachments});
 
   @override
   State<PickImageWidget> createState() => _PickImageWidgetState();
 }
 
 class _PickImageWidgetState extends State<PickImageWidget> {
-  List<File> files = [];
+  List<JournalAttachment> attachments = [];
   @override
   void initState() {
-    files = widget.selectedFiles;
+    attachments = List<JournalAttachment>.from(widget.selectedAttachments);
     super.initState();
   }
 
@@ -37,13 +37,15 @@ class _PickImageWidgetState extends State<PickImageWidget> {
                 mainAxisSpacing: 5,
                 crossAxisSpacing: 5,
               ),
-              itemCount: files.length + 1, // Add 1 for the "+" button
+              itemCount: attachments.length + 1, // Add 1 for the "+" button
               itemBuilder: (context, index) {
                 if (index == 0) {
                   return GestureDetector(
                     onTap: () async {
-                      List<File> temps = await pickImage();
-                      files.addAll(temps);
+                      final temps = await pickImage();
+                      attachments.addAll(
+                        temps.map((file) => JournalAttachment.local(file)),
+                      );
                       setState(() {});
                     },
                     child: Container(
@@ -65,13 +67,13 @@ class _PickImageWidgetState extends State<PickImageWidget> {
                       SizedBox(
                         width: double.infinity,
                         height: double.infinity,
-                        child: Image.file(files[imageIndex], fit: BoxFit.cover),
+                        child: _buildPreview(attachments[imageIndex]),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: GestureDetector(
                           onTap: () {
-                            files.removeAt(imageIndex);
+                            attachments.removeAt(imageIndex);
                             setState(() {});
                           },
                           child: AppAssets.svgMinus,
@@ -88,11 +90,29 @@ class _PickImageWidgetState extends State<PickImageWidget> {
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop(files);
+            Navigator.of(
+              context,
+            ).pop(List<JournalAttachment>.from(attachments));
           },
           child: Text('DONE', style: Theme.of(context).textTheme.titleLarge),
         ),
       ],
     );
+  }
+
+  Widget _buildPreview(JournalAttachment attachment) {
+    if (attachment.isRemote) {
+      return CachedNetworkImage(
+        imageUrl: attachment.signedUrl ?? '',
+        fit: BoxFit.cover,
+        errorWidget: (_, __, ___) => const Icon(Icons.broken_image),
+      );
+    }
+
+    if (attachment.file != null) {
+      return Image.file(attachment.file!, fit: BoxFit.cover);
+    }
+
+    return const Icon(Icons.image, size: 32);
   }
 }

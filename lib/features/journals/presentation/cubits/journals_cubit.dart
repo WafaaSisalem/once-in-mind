@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onceinmind/core/utils/status_enum.dart';
 import 'package:onceinmind/features/auth/data/repositories/auth_repository.dart';
+import 'package:onceinmind/features/journals/data/models/journal_attachment.dart';
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
 import 'package:onceinmind/features/journals/data/repositories/journal_repository.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/journals_state.dart';
@@ -27,7 +26,7 @@ class JournalsCubit extends Cubit<JournalsState> {
       for (var journal in journals) {
         if (journal.imagesUrls.isNotEmpty) {
           final signedUrls = await _storageService.getSignedUrlsFromPaths(
-            journal.imagesUrls,
+            journal.imagesUrls, //imagePath not url
           );
 
           journal.signedUrls = signedUrls;
@@ -44,16 +43,21 @@ class JournalsCubit extends Cubit<JournalsState> {
     required String content,
     required DateTime date,
     required Status status,
-    required List<File> files,
+    required List<JournalAttachment> attachments,
   }) async {
     try {
       emit(JournalsLoading());
 
       List<String> imagePaths = [];
 
-      if (files.isNotEmpty) {
+      final localFiles = attachments
+          .where((attachment) => attachment.isLocal && attachment.file != null)
+          .map((attachment) => attachment.file!)
+          .toList();
+
+      if (localFiles.isNotEmpty) {
         imagePaths = await _storageService.uploadImageAndGetPaths(
-          files,
+          localFiles,
           userId,
         );
       }
@@ -70,6 +74,12 @@ class JournalsCubit extends Cubit<JournalsState> {
 
       await _journalRepository.addJournal(userId, journal);
 
+      if (imagePaths.isNotEmpty) {
+        journal.signedUrls = await _storageService.getSignedUrlsFromPaths(
+          imagePaths,
+        );
+      }
+
       emit(JournalsInitial());
       await fetchJournals();
     } catch (e) {
@@ -77,23 +87,63 @@ class JournalsCubit extends Cubit<JournalsState> {
     }
   }
 
-  Future<void> updateJournal(JournalModel journal) async {
+  Future<JournalModel> updateJournalWithAttachments({
+    required JournalModel journal,
+    required List<JournalAttachment> attachments,
+    required List<String> originalRemotePaths,
+  }) async {
     try {
-      await _journalRepository.updateJournal(userId, journal);
+      final keptRemotePaths = attachments
+          .where((attachment) => attachment.isRemote)
+          .map((attachment) => attachment.storagePath!)
+          .toList();
+
+      final removedRemotePaths = originalRemotePaths
+          .where((path) => !keptRemotePaths.contains(path))
+          .toList();
+
+      if (removedRemotePaths.isNotEmpty) {
+        await _storageService.deleteImages(removedRemotePaths);
+      }
+
+      final localFiles = attachments
+          .where((attachment) => attachment.isLocal && attachment.file != null)
+          .map((attachment) => attachment.file!)
+          .toList();
+
+      final uploadedPaths = localFiles.isNotEmpty
+          ? await _storageService.uploadImageAndGetPaths(localFiles, userId)
+          : <String>[];
+
+      final combinedPaths = [...keptRemotePaths, ...uploadedPaths];
+
+      final updatedJournal = journal.copyWith(imagesUrls: combinedPaths);
+
+      await _journalRepository.updateJournal(userId, updatedJournal);
+
+      if (combinedPaths.isNotEmpty) {
+        updatedJournal.signedUrls = await _storageService
+            .getSignedUrlsFromPaths(combinedPaths);
+      } else {
+        updatedJournal.signedUrls = [];
+      }
 
       if (state is JournalsLoaded) {
         final currentJournals = (state as JournalsLoaded).journals;
 
         final updatedList = currentJournals
-            .map((j) => j.id == journal.id ? journal : j)
+            .map((j) => j.id == updatedJournal.id ? updatedJournal : j)
             .toList();
         //order by date
         updatedList.sort((a, b) => b.date.compareTo(a.date));
 
         emit(JournalsLoaded(updatedList));
       }
+
+      return updatedJournal;
     } catch (e) {
       emit(JournalsError('Failed to update journal'));
+      rethrow;
     }
   }
 

@@ -1,20 +1,21 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
 import 'package:onceinmind/core/utils/status_enum.dart';
 import 'package:onceinmind/features/home/presentation/widgets/fab_widget.dart';
+import 'package:onceinmind/features/journals/data/models/journal_attachment.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/gallery_button.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/status_button.dart';
 
 class CustomExpandableFab extends StatelessWidget {
   final Function(Status status) onStatusChanged;
-  final Function(List<File> urls) onImageSelected;
+  final Function(List<JournalAttachment> attachments) onImageSelected;
+  final List<JournalAttachment> attachments;
   const CustomExpandableFab({
     super.key,
     required this.onStatusChanged,
     required this.onImageSelected,
+    required this.attachments,
   });
 
   @override
@@ -27,8 +28,9 @@ class CustomExpandableFab extends StatelessWidget {
       closeButtonBuilder: buildCloseBtn(), // Done
       children: [
         GalleryButton(
-          onPressed: (files) {
-            onImageSelected(files);
+          attachments: attachments,
+          onPressed: (attachments) {
+            onImageSelected(List<JournalAttachment>.from(attachments));
           },
         ),
         buildMapBtn(),

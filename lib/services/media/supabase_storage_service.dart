@@ -43,4 +43,14 @@ class SupabaseStorageService {
 
     return signedUrls;
   }
+
+  Future<void> deleteImages(List<String> paths) async {
+    if (paths.isEmpty) return;
+    final storage = _supabase.storage.from('journal-images');
+    try {
+      await storage.remove(paths);
+    } catch (e) {
+      print('❌ Error deleting images $paths: $e');
+    }
+  }
 }
