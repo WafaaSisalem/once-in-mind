@@ -47,7 +47,11 @@ class _DisplayJournalPageState extends State<DisplayJournalPage> {
     print('DisplayJournalPage rebuilt');
     return Scaffold(
       appBar: AppbarWidget(
-        titlePlace: CustomBackButton(),
+        titlePlace: CustomBackButton(
+          onPressed: () {
+            context.pop();
+          },
+        ),
         actions: [
           _appBarIcon(
             icon: AppAssets.svgWhiteDelete,

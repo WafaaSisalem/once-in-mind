@@ -7,7 +7,8 @@ class AppAssets {
   static final SvgPicture signUp = SvgPicture.asset(
     'assets/images/svgs/sign_up.svg',
   );
-
+  static const String flagPinIcon = 'assets/images/svgs/flagpin.svg';
+  static SvgPicture svgFlagPin = SvgPicture.asset(flagPinIcon);
   static final SvgPicture signIN = SvgPicture.asset(
     'assets/images/svgs/sign_in.svg',
   );

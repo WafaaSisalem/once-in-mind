@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onceinmind/core/constants/app_routes.dart';
-import 'package:onceinmind/core/utils/type_defs.dart';
 import 'package:onceinmind/features/auth/presentation/pages/sign_in_page.dart';
 import 'package:onceinmind/features/auth/presentation/pages/sign_up_page.dart';
 
@@ -10,12 +9,10 @@ import 'package:onceinmind/features/auth/presentation/cubits/auth/auth_cubit.dar
 import 'package:onceinmind/features/auth/presentation/cubits/auth/auth_state.dart';
 import 'package:onceinmind/features/home/presentation/pages/home_page.dart';
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
-import 'package:onceinmind/features/journals/presentation/pages/add_journal_page.dart';
 import 'package:onceinmind/features/journals/presentation/pages/display_journal_page.dart';
-import 'package:onceinmind/features/journals/presentation/pages/edit_journal_page.dart';
 import 'package:onceinmind/features/journals/presentation/pages/image_viewer_page.dart';
 import 'package:onceinmind/features/journals/presentation/pages/journal_editor_page.dart';
-import 'package:onceinmind/features/location/data/models/location_model.dart';
+import 'package:onceinmind/features/location/presentation/pages/location_page.dart';
 
 class AppRouter {
   static final GoRouter _router = GoRouter(
@@ -60,6 +57,13 @@ class AppRouter {
           GoRoute(
             path: AppRoutes.addJournal,
             name: AppRoutes.addJournal,
+            routes: [
+              GoRoute(
+                path: AppRoutes.location,
+                name: AppRoutes.location,
+                builder: (context, state) => const LocationPage(),
+              ),
+            ],
             builder: (context, state) => JournalEditorPage(),
             // builder: (context, state) => AddJournalPage(),
             // path: AppRoutes.addJournal,
@@ -106,32 +110,11 @@ class AppRouter {
       //   },
       // ),
 
-      // Calendar route
-      GoRoute(
-        path: '/calendar',
-        name: 'calendar',
-        builder: (context, state) => const CalendarPage(),
-      ),
-
       // Search route
       GoRoute(
         path: '/search',
         name: 'search',
         builder: (context, state) => const SearchPage(),
-      ),
-
-      // Gallery route
-      GoRoute(
-        path: '/gallery',
-        name: 'gallery',
-        builder: (context, state) => const GalleryPage(),
-      ),
-
-      // Map route
-      GoRoute(
-        path: '/map',
-        name: 'map',
-        builder: (context, state) => const MapPage(),
       ),
     ],
 
@@ -143,30 +126,9 @@ class AppRouter {
   static GoRouter get router => _router;
 }
 
-class CalendarPage extends StatelessWidget {
-  const CalendarPage({super.key});
-  @override
-  Widget build(BuildContext context) =>
-      const Scaffold(body: Center(child: Text('Calendar Page')));
-}
-
 class SearchPage extends StatelessWidget {
   const SearchPage({super.key});
   @override
   Widget build(BuildContext context) =>
       const Scaffold(body: Center(child: Text('Search Page')));
-}
-
-class GalleryPage extends StatelessWidget {
-  const GalleryPage({super.key});
-  @override
-  Widget build(BuildContext context) =>
-      const Scaffold(body: Center(child: Text('Gallery Page')));
-}
-
-class MapPage extends StatelessWidget {
-  const MapPage({super.key});
-  @override
-  Widget build(BuildContext context) =>
-      const Scaffold(body: Center(child: Text('Map Page')));
 }

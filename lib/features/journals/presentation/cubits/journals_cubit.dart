@@ -5,6 +5,7 @@ import 'package:onceinmind/features/journals/data/models/journal_attachment.dart
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
 import 'package:onceinmind/features/journals/data/repositories/journal_repository.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/journals_state.dart';
+import 'package:onceinmind/features/location/data/models/location_model.dart';
 import 'package:onceinmind/services/media/supabase_storage_service.dart';
 
 class JournalsCubit extends Cubit<JournalsState> {
@@ -22,13 +23,19 @@ class JournalsCubit extends Cubit<JournalsState> {
     try {
       final List<JournalModel> journals = await _journalRepository
           .getAllJournals(userId);
-
       for (var journal in journals) {
         if (journal.imagesUrls.isNotEmpty) {
+          //signedurls always null,
+          // because were getting the journals from db where
+          // we dont store signed urls
+          //TODO optimize by fetching signed urls
+          if (journal.signedUrls != null &&
+              journal.signedUrls!.length == journal.imagesUrls.length) {
+            continue; //signedUrls already fetched
+          }
           final signedUrls = await _storageService.getSignedUrlsFromPaths(
             journal.imagesUrls, //imagePath not url
           );
-
           journal.signedUrls = signedUrls;
         }
       }
@@ -44,6 +51,7 @@ class JournalsCubit extends Cubit<JournalsState> {
     required DateTime date,
     required Status status,
     required List<JournalAttachment> attachments,
+    required LocationModel? location,
   }) async {
     try {
       emit(JournalsLoading());
@@ -61,25 +69,17 @@ class JournalsCubit extends Cubit<JournalsState> {
           userId,
         );
       }
-
       final journal = JournalModel(
         id: DateTime.now().toString(),
         content: content,
         date: date,
         imagesUrls: imagePaths,
         isLocked: false,
-        location: null,
+        location: location,
         status: status.name,
       );
 
       await _journalRepository.addJournal(userId, journal);
-
-      if (imagePaths.isNotEmpty) {
-        journal.signedUrls = await _storageService.getSignedUrlsFromPaths(
-          imagePaths,
-        );
-      }
-
       emit(JournalsInitial());
       await fetchJournals();
     } catch (e) {

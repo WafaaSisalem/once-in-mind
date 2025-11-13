@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomBackButton extends StatelessWidget {
-  const CustomBackButton({super.key});
+  final VoidCallback onPressed;
+  const CustomBackButton({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +13,7 @@ class CustomBackButton extends StatelessWidget {
         size: 28,
         color: Colors.white,
       ),
-      onPressed: () => context.pop(),
+      onPressed: onPressed,
     );
   }
 }

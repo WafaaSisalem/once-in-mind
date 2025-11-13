@@ -5,12 +5,14 @@ import 'package:go_router/go_router.dart';
 import 'package:onceinmind/core/utils/status_enum.dart';
 import 'package:onceinmind/core/widgets/appbar_widget.dart';
 import 'package:onceinmind/core/widgets/custom_back_button.dart';
+import 'package:onceinmind/core/widgets/dialog_widget.dart';
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
 import 'package:onceinmind/features/journals/data/models/journal_attachment.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/journals_cubit.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/custom_expandable_fab.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/date_picker_button.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/writing_area.dart';
+import 'package:onceinmind/features/location/data/models/location_model.dart';
 
 class JournalEditorPage extends StatefulWidget {
   final JournalModel? journal;
@@ -27,6 +29,8 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
   DateTime date = DateTime.now();
   List<JournalAttachment> attachments = [];
   List<String> originalRemotePaths = [];
+  bool isEditing = false;
+  LocationModel? location;
 
   @override
   void dispose() {
@@ -38,6 +42,8 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
   void initState() {
     super.initState();
     if (widget.journal != null) {
+      location = widget.journal!.location;
+      isEditing = true;
       controller = TextEditingController(text: widget.journal!.content);
       date = widget.journal!.date;
       status = stringToStatus(widget.journal!.status);
@@ -61,7 +67,33 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
       appBar: AppbarWidget(
         titlePlace: Row(
           children: [
-            CustomBackButton(),
+            CustomBackButton(
+              onPressed: () {
+                if (!isEditing) {
+                  if (controller.text.trim() == '' && attachments.isEmpty) {
+                    context.pop();
+                    return;
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return DialogWidget(
+                          dialogType: DialogType.discard,
+                          entryType: 'journal',
+                          onOkPressed: (value) {
+                            context.pop();
+                            context.pop();
+                            //or navigate to home context.go
+                          },
+                        );
+                      },
+                    );
+                  }
+                } else {
+                  context.pop();
+                }
+              },
+            ),
             SizedBox(width: 70),
             DatePickerButton(
               initialDate: date,
@@ -91,6 +123,9 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
       ),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: CustomExpandableFab(
+        onLocationPressed: (location) {
+          this.location = location;
+        },
         attachments: attachments,
         onImageSelected: (newAttachments) async {
           attachments = List<JournalAttachment>.from(newAttachments);
@@ -104,19 +139,28 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
 
   void saveJournal() async {
     final content = controller.text.trim();
-    if (content.isEmpty) {
-      context.pop();
 
-      return;
-    }
-    // update existing journal
-    if (widget.journal != null) {
+    if (isEditing) {
+      final cubit = context.read<JournalsCubit>();
+
+      if (content.isEmpty) {
+        cubit.deleteJournal(widget.journal!.id);
+        //TODO: show the delete dialog
+        // Navigator.pop until we reach the home page not the previous page or context.go home
+        context.pop();
+        context.pop();
+
+        return;
+      }
       final baseJournal = widget.journal!.copyWith(
         content: content,
         date: date,
         status: status.name,
       );
-      final cubit = context.read<JournalsCubit>();
+      // if (baseJournal == widget.journal) {
+      //   context.pop();
+      //   return;
+      // }
       final updatedJournal = await cubit.updateJournalWithAttachments(
         journal: baseJournal,
         attachments: attachments,
@@ -125,12 +169,17 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
 
       context.pop(updatedJournal);
     } else {
-      // add new journal
+      if (content.isEmpty) {
+        context.pop();
+
+        return;
+      }
       context.read<JournalsCubit>().saveJournal(
         content: content,
         date: date,
         status: status,
         attachments: attachments,
+        location: location,
       );
 
       context.pop();

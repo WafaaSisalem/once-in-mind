@@ -17,7 +17,6 @@ class SupabaseStorageService {
 
       try {
         await _supabase.storage.from('journal-images').upload(path, file);
-        print('✅ Uploaded: $path');
 
         paths.add(path);
       } catch (e) {

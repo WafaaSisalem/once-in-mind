@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,6 +13,7 @@ import 'package:onceinmind/features/auth/presentation/cubits/user/user_cubit.dar
 import 'package:onceinmind/features/journals/data/repositories/journal_repository.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/image_slider_cubit.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/journals_cubit.dart';
+import 'package:onceinmind/features/location/presentation/cubits/location_cubit.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'firebase_options.dart';
@@ -56,6 +55,11 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) {
             return ImageSliderCubit(); // مع انه ما بدي ياه يضل طول التطبيق بس لمن افتح عرض الجورنال
+          },
+        ),
+        BlocProvider(
+          create: (context) {
+            return LocationCubit();
           },
         ),
         BlocProvider(

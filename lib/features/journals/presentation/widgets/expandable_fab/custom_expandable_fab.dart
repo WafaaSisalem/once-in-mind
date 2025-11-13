@@ -5,17 +5,21 @@ import 'package:onceinmind/core/utils/status_enum.dart';
 import 'package:onceinmind/features/home/presentation/widgets/fab_widget.dart';
 import 'package:onceinmind/features/journals/data/models/journal_attachment.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/gallery_button.dart';
+import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/location_button.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/status_button.dart';
+import 'package:onceinmind/features/location/data/models/location_model.dart';
 
 class CustomExpandableFab extends StatelessWidget {
   final Function(Status status) onStatusChanged;
   final Function(List<JournalAttachment> attachments) onImageSelected;
   final List<JournalAttachment> attachments;
+  final Function(LocationModel location) onLocationPressed;
   const CustomExpandableFab({
     super.key,
     required this.onStatusChanged,
     required this.onImageSelected,
     required this.attachments,
+    required this.onLocationPressed,
   });
 
   @override
@@ -33,7 +37,11 @@ class CustomExpandableFab extends StatelessWidget {
             onImageSelected(List<JournalAttachment>.from(attachments));
           },
         ),
-        buildMapBtn(),
+        LocationButton(
+          onPressed: (location) {
+            onLocationPressed(location);
+          },
+        ),
         buildWeatherBtn(theme),
         StatusButton(
           onPressed: (status) {
@@ -68,18 +76,6 @@ class CustomExpandableFab extends StatelessWidget {
     );
   }
 
-  FloatingActionButton buildMapBtn() {
-    return FloatingActionButton(
-      shape: const CircleBorder(),
-
-      heroTag: 'btn2',
-      backgroundColor: Colors.white,
-      child: AppAssets.svgMap,
-      // child: journalProvider.location == null ? AppAssets.svgMap:AppAssets. svgMapDone,
-      onPressed: () {},
-    );
-  }
-
   FloatingActionButtonBuilder buildCloseBtn() {
     return FloatingActionButtonBuilder(
       builder: (context, onPressed, progress) => FabWidget(
@@ -98,66 +94,4 @@ class CustomExpandableFab extends StatelessWidget {
       size: 20,
     );
   }
-
-  //     onMapBtnPressed() {
-  //     ThemeData theme = Theme.of(context);
-  //     showDialog(
-  //         context: context,
-  //         builder: (ctx) {
-  //           return AlertDialog(
-  //             title: const Text(
-  //               'No Location Detected...',
-  //             ),
-  //             content: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               mainAxisSize: MainAxisSize.min,
-  //               children: [
-  //                 TextButton.icon(
-  //                     onPressed: () async {
-  //                      context.pop();
-  //                       journalProvider.location = await AppRouter.router
-  //                           .pushFunction(const MapScreen());
-  //                       setState(() {});
-  //                     },
-  //                     icon: Icon(
-  //                       Icons.add_location_alt_rounded,
-  //                       color: theme.primaryColor,
-  //                     ),
-  //                     label: Text(
-  //                       'Pick a Place',
-  //                       style: theme.textTheme.headlineMedium,
-  //                     )),
-  //                 TextButton.icon(
-  //                     onPressed: () {
-  //                       journalProvider.getLocation();
-  //                       context.pop();
-  //                     },
-  //                     icon: Icon(
-  //                       Icons.gps_fixed,
-  //                       color: theme.primaryColor,
-  //                     ),
-  //                     label: Text(
-  //                       'Setup GPS',
-  //                       style: theme.textTheme.headlineMedium,
-  //                     )),
-  //                 if (journalProvider.location != null)
-  //                   TextButton.icon(
-  //                       onPressed: () {
-  //                         journalProvider.location = null;
-  //                         setState(() {});
-  //                         context.pop();
-  //                       },
-  //                       icon: Icon(
-  //                         Icons.location_off,
-  //                         color: theme.primaryColor,
-  //                       ),
-  //                       label: Text(
-  //                         'Remove Location',
-  //                         style: theme.textTheme.headlineMedium,
-  //                       )),
-  //               ],
-  //             ),
-  //           );
-  //         });
-  //   }
 }

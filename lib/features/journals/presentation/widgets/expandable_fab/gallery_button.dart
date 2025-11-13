@@ -27,14 +27,6 @@ class _GalleryButtonState extends State<GalleryButton> {
     super.initState();
   }
 
-  // @override
-  // void didUpdateWidget(covariant GalleryButton oldWidget) {
-  //   if (oldWidget.attachments != widget.attachments) {
-  //     selectedAttachments = List<JournalAttachment>.from(widget.attachments);
-  //   }
-  //   super.didUpdateWidget(oldWidget);
-  // }
-
   @override
   Widget build(BuildContext context) {
     return CustomChildFab(

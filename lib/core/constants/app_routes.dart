@@ -13,5 +13,5 @@ class AppRoutes {
   static const calendar = 'calendar';
   static const search = 'search';
   static const gallery = 'gallery';
-  static const map = 'map';
+  static const location = 'location';
 }
