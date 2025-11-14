@@ -20,11 +20,6 @@ class _CalendarTabState extends State<CalendarTab> {
   DateTime selectedDate = DateTime.now();
 
   @override
-  // void initState() {
-  //   super.initState();
-  //   context.read<JournalsCubit>().fetchJournals();
-  // }
-  @override
   Widget build(BuildContext context) {
     return BlocBuilder<JournalsCubit, JournalsState>(
       builder: (context, state) {
@@ -63,7 +58,9 @@ class _CalendarTabState extends State<CalendarTab> {
               Expanded(
                 child: dayJournals.isEmpty
                     ? Center(child: FallbackWidget.noCalendarEntries())
-                    : ListView.builder(
+                    : ListView.separated(
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 10),
                         padding: const EdgeInsets.all(16),
                         itemCount: dayJournals.length,
                         itemBuilder: (context, index) =>

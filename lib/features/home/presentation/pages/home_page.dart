@@ -52,7 +52,9 @@ class HomeView extends StatelessWidget {
                 },
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.pushNamed(AppRoutes.search);
+                },
                 icon: const Icon(Icons.search, color: AppColors.white),
               ),
               SizedBox(width: 20),

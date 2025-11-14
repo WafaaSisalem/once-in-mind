@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onceinmind/features/auth/presentation/cubits/auth/auth_cubit.dart';
 import 'package:onceinmind/features/auth/presentation/cubits/auth/auth_state.dart';
 import 'package:onceinmind/features/home/presentation/pages/home_page.dart';
+import 'package:onceinmind/features/home/presentation/pages/search_page.dart';
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
 import 'package:onceinmind/features/journals/presentation/pages/display_journal_page.dart';
 import 'package:onceinmind/features/journals/presentation/pages/image_viewer_page.dart';
@@ -53,6 +54,12 @@ class AppRouter {
         name: AppRoutes.home,
         builder: (context, state) => HomePage(),
         routes: [
+          // Search route
+          GoRoute(
+            path: AppRoutes.search,
+            name: AppRoutes.search,
+            builder: (context, state) => const SearchPage(),
+          ),
           //Add journal Screen
           GoRoute(
             path: AppRoutes.addJournal,
@@ -109,13 +116,6 @@ class AppRouter {
       //     return EntryDetailPage(entryId: id);
       //   },
       // ),
-
-      // Search route
-      GoRoute(
-        path: '/search',
-        name: 'search',
-        builder: (context, state) => const SearchPage(),
-      ),
     ],
 
     // Error page
@@ -124,11 +124,4 @@ class AppRouter {
   );
 
   static GoRouter get router => _router;
-}
-
-class SearchPage extends StatelessWidget {
-  const SearchPage({super.key});
-  @override
-  Widget build(BuildContext context) =>
-      const Scaffold(body: Center(child: Text('Search Page')));
 }

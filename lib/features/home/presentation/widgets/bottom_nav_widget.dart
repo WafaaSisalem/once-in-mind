@@ -76,10 +76,7 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
           },
           child: SvgPicture.asset(
             widget.svgs[index],
-            colorFilter: ColorFilter.mode(
-              selectedIndex == index ? Colors.white : theme.primaryColor, //
-              BlendMode.srcIn,
-            ),
+            color: selectedIndex == index ? Colors.white : theme.primaryColor,
           ),
         ),
       ),

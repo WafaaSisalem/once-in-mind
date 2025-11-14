@@ -14,6 +14,7 @@ import 'package:onceinmind/features/journals/data/repositories/journal_repositor
 import 'package:onceinmind/features/journals/presentation/cubits/image_slider_cubit.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/journals_cubit.dart';
 import 'package:onceinmind/features/location/presentation/cubits/location_cubit.dart';
+import 'package:onceinmind/features/location/presentation/cubits/weather_cubit.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'firebase_options.dart';
@@ -58,8 +59,15 @@ class MyApp extends StatelessWidget {
           },
         ),
         BlocProvider(
+          lazy: false,
           create: (context) {
             return LocationCubit();
+          },
+        ),
+        BlocProvider(
+          lazy: false,
+          create: (context) {
+            return WeatherCubit();
           },
         ),
         BlocProvider(

@@ -8,6 +8,7 @@ import 'package:onceinmind/features/location/presentation/cubits/location_cubit.
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onceinmind/core/constants/app_routes.dart';
 import 'package:onceinmind/features/location/presentation/cubits/location_states.dart';
+import 'package:onceinmind/features/location/presentation/cubits/weather_cubit.dart';
 
 class LocationButton extends StatelessWidget {
   final Function(LocationModel location) onPressed;
@@ -22,6 +23,13 @@ class LocationButton extends StatelessWidget {
       listener: (context, state) {
         if (state is LocationError) {
           showMyToast(message: state.message, context: context);
+        }
+        if (state is LocationLoaded) {
+          onPressed(state.location);
+          context.read<WeatherCubit>().getWeather(
+            state.location.lat,
+            state.location.lng,
+          );
         }
       },
       builder: (context, state) => CustomChildFab(
@@ -62,9 +70,6 @@ class LocationButton extends StatelessWidget {
                       //set up gps
                       context.pop();
                       await locationCubit.getCurrentLocation();
-                      if (state is LocationLoaded) {
-                        onPressed(state.location);
-                      }
                     },
                     icon: Icon(Icons.gps_fixed, color: theme.primaryColor),
                     label: Text(

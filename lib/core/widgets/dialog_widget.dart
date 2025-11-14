@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onceinmind/core/utils/type_defs.dart';
 
 class DialogTextFieldWidget extends StatelessWidget {
   const DialogTextFieldWidget({
@@ -38,19 +39,17 @@ class DialogTextFieldWidget extends StatelessWidget {
   }
 }
 
-enum DialogType { discard, delete, password, addTask, editTask, quit }
+enum DialogType { discard, delete, password, editTask, quit }
 
 class DialogWidget extends StatefulWidget {
   DialogWidget({
     super.key,
     required this.dialogType,
-    required this.entryType,
     required this.onOkPressed,
     this.content,
     this.onNextPressed,
   });
 
-  final String entryType;
   final DialogType dialogType;
   final Function(String) onOkPressed;
   Function(String)? onNextPressed;
@@ -60,59 +59,36 @@ class DialogWidget extends StatefulWidget {
 }
 
 class _DialogWidgetState extends State<DialogWidget> {
-  String? dialogTitle;
-  Widget? dialogContent;
+  DialogData? dialogData;
   String value = '';
   bool nextButton = false;
   initValues() {
-    switch (widget.dialogType) {
-      case DialogType.delete:
-        dialogTitle = 'Delete';
-        dialogContent = Text(
-          'Do you want to delete this ${widget.entryType} entry?',
-        );
-        break;
-      case DialogType.discard:
-        dialogTitle = 'Discard';
-        dialogContent = const Text('Do you want to discard the changes?');
-        break;
-      case DialogType.password:
-        dialogTitle = 'Password';
-        dialogContent = DialogTextFieldWidget(
+    dialogData = switch (widget.dialogType) {
+      DialogType.delete => (
+        dialogTitle: 'Delete',
+        dialogContent: Text('Do you want to delete this journal entry?'),
+      ),
+      DialogType.discard => (
+        dialogTitle: 'Discard',
+        dialogContent: Text('Do you want to discard the changes?'),
+      ),
+
+      DialogType.password => (
+        dialogTitle: 'Password',
+        dialogContent: DialogTextFieldWidget(
           isObscured: true,
           hintText: '',
           onChanged: (value) {
             this.value = value;
           },
-        );
-        break;
-
-      case DialogType.addTask:
-        dialogTitle = 'Add Task';
-        dialogContent = DialogTextFieldWidget(
-          isObscured: false,
-          hintText: 'write a task',
-          onChanged: (value) {
-            this.value = value;
-          },
-        );
-        nextButton = true;
-        break;
-      case DialogType.editTask:
-        dialogTitle = 'Edit Task';
-        dialogContent = DialogTextFieldWidget(
-          isObscured: false,
-          content: widget.content,
-          hintText: 'write a task',
-          onChanged: (value) {
-            this.value = value;
-          },
-        );
-        break;
-      case DialogType.quit:
-        dialogTitle = 'Quit';
-        dialogContent = const Text('Do you want to quit?');
-    }
+        ),
+      ),
+      DialogType.quit => (
+        dialogTitle: 'Quit',
+        dialogContent: const Text('Do you want to quit?'),
+      ),
+      _ => (dialogTitle: null, dialogContent: null),
+    };
   }
 
   @override
@@ -128,8 +104,11 @@ class _DialogWidgetState extends State<DialogWidget> {
       backgroundColor: Colors.white, //
       contentPadding: EdgeInsets.only(top: 10, bottom: 0, left: 20, right: 20),
       titlePadding: EdgeInsets.only(top: 20, bottom: 0, left: 20),
-      title: Text(dialogTitle!, style: theme.textTheme.titleLarge),
-      content: dialogContent,
+      title: Text(
+        dialogData!.dialogTitle ?? '',
+        style: theme.textTheme.titleLarge,
+      ),
+      content: dialogData!.dialogContent,
       actions: [
         if (nextButton) ...[
           TextButton(

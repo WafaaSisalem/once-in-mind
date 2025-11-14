@@ -19,7 +19,8 @@ class JournalsTab extends StatelessWidget {
             return Center(child: FallbackWidget.noJouranl());
           }
 
-          return ListView.builder(
+          return ListView.separated(
+            separatorBuilder: (context, index) => const SizedBox(height: 10),
             padding: const EdgeInsets.all(16),
             itemCount: state.journals.length,
             itemBuilder: (context, index) {

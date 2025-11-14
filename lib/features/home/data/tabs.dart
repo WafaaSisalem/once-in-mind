@@ -20,12 +20,3 @@ List<TabModel> tabs = [
   (content: const LocationTab(), title: 'Location', iconPath: AppAssets.map),
   (content: const GalleryTab(), title: 'Gallery', iconPath: AppAssets.gallery),
 ];
-
-class LocationTab extends StatelessWidget {
-  const LocationTab({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}

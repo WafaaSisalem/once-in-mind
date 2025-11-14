@@ -32,7 +32,8 @@ class AppAssets {
   static final SvgPicture svgEditIcon = SvgPicture.asset(editIcon);
   static const String dragIcon = 'assets/images/svgs/drag.svg';
   static final SvgPicture svgDrag = SvgPicture.asset(dragIcon);
-
+  static final String urlPlaceholderImage =
+      'https://firebasestorage.googleapis.com/v0/b/graduation-project-adedc.appspot.com/o/note.jpg?alt=media&token=66896385-8388-4ba0-aee6-00b29e328aef';
   static const String unlockIcon = 'assets/images/svgs/unlock.svg';
   static final SvgPicture svgUnlock = SvgPicture.asset(unlockIcon);
   static const String happyIcon = 'assets/images/svgs/happy.svg';

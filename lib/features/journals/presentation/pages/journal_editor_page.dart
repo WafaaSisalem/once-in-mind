@@ -13,6 +13,9 @@ import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab
 import 'package:onceinmind/features/journals/presentation/widgets/date_picker_button.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/writing_area.dart';
 import 'package:onceinmind/features/location/data/models/location_model.dart';
+import 'package:onceinmind/features/location/presentation/cubits/location_cubit.dart';
+import 'package:onceinmind/features/location/presentation/cubits/location_states.dart';
+import 'package:onceinmind/features/location/presentation/cubits/weather_cubit.dart';
 
 class JournalEditorPage extends StatefulWidget {
   final JournalModel? journal;
@@ -31,7 +34,7 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
   List<String> originalRemotePaths = [];
   bool isEditing = false;
   LocationModel? location;
-
+  String temperature = '';
   @override
   void dispose() {
     controller.dispose();
@@ -43,6 +46,7 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
     super.initState();
     if (widget.journal != null) {
       location = widget.journal!.location;
+      temperature = widget.journal!.weather;
       isEditing = true;
       controller = TextEditingController(text: widget.journal!.content);
       date = widget.journal!.date;
@@ -63,6 +67,10 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (isEditing) {
+      context.read<LocationCubit>().setLocation(widget.journal!.location);
+      context.read<WeatherCubit>().setWeather(widget.journal!.weather);
+    }
     return Scaffold(
       appBar: AppbarWidget(
         titlePlace: Row(
@@ -71,7 +79,20 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
               onPressed: () {
                 if (!isEditing) {
                   if (controller.text.trim() == '' && attachments.isEmpty) {
-                    context.pop();
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return DialogWidget(
+                          dialogType: DialogType.delete,
+
+                          onOkPressed: (value) {
+                            clearDataAndPop();
+                            context.pop();
+                            //or navigate to home context.go
+                          },
+                        );
+                      },
+                    );
                     return;
                   } else {
                     showDialog(
@@ -79,9 +100,9 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
                       builder: (context) {
                         return DialogWidget(
                           dialogType: DialogType.discard,
-                          entryType: 'journal',
+
                           onOkPressed: (value) {
-                            context.pop();
+                            clearDataAndPop();
                             context.pop();
                             //or navigate to home context.go
                           },
@@ -90,7 +111,21 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
                     );
                   }
                 } else {
-                  context.pop();
+                  //لازم تشوفي اذا فش تغييرات خلص بيعمل بوب اذا في تغييرات بيطلعلو متاكد بدك تتجاهلهم
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return DialogWidget(
+                        dialogType: DialogType.discard,
+
+                        onOkPressed: (value) {
+                          clearDataAndPop();
+                          context.pop();
+                          //or navigate to home context.go
+                        },
+                      );
+                    },
+                  );
                 }
               },
             ),
@@ -119,10 +154,39 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
       ),
       body: Container(
         padding: const EdgeInsets.only(left: 30, right: 30, top: 20),
-        child: WritingArea(controller: controller),
+        child: Column(
+          children: [
+            BlocBuilder<LocationCubit, LocationStates>(
+              builder: (context, state) => Align(
+                alignment: Alignment.centerLeft,
+                child: state is LocationLoading
+                    ? SizedBox(
+                        width: 10,
+                        height: 10,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : state is LocationLoaded
+                    ? Text(
+                        state.location.address,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.left,
+                        maxLines: 2,
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      )
+                    : SizedBox.shrink(),
+              ),
+            ),
+            Expanded(child: WritingArea(controller: controller)),
+          ],
+        ),
       ),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: CustomExpandableFab(
+        onWeatherLoaded: (temperature) {
+          this.temperature = temperature;
+        },
         onLocationPressed: (location) {
           this.location = location;
         },
@@ -144,11 +208,24 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
       final cubit = context.read<JournalsCubit>();
 
       if (content.isEmpty) {
-        cubit.deleteJournal(widget.journal!.id);
-        //TODO: show the delete dialog
-        // Navigator.pop until we reach the home page not the previous page or context.go home
-        context.pop();
-        context.pop();
+        showDialog(
+          context: context,
+          builder: (context) {
+            return DialogWidget(
+              dialogType: DialogType.delete,
+              onOkPressed: (value) {
+                context.read<JournalsCubit>().deleteJournal(
+                  widget.journal!.id,
+                  widget.journal!.imagesUrls.map((e) => e.toString()).toList(),
+                );
+                // Navigator.pop until we reach the home page not the previous page or context.go home
+                clearDataAndPop();
+                context.pop();
+                context.pop();
+              },
+            );
+          },
+        );
 
         return;
       }
@@ -156,21 +233,23 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
         content: content,
         date: date,
         status: status.name,
+        location: location,
+        weather: temperature,
       );
-      // if (baseJournal == widget.journal) {
-      //   context.pop();
-      //   return;
-      // }
+
       final updatedJournal = await cubit.updateJournalWithAttachments(
         journal: baseJournal,
         attachments: attachments,
         originalRemotePaths: originalRemotePaths,
       );
-
-      context.pop(updatedJournal);
+      if (mounted) {
+        context.read<LocationCubit>().clearLocation();
+        context.read<WeatherCubit>().clearWeather();
+        clearDataAndPop(popedValue: updatedJournal);
+      }
     } else {
       if (content.isEmpty) {
-        context.pop();
+        clearDataAndPop();
 
         return;
       }
@@ -180,9 +259,16 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
         status: status,
         attachments: attachments,
         location: location,
+        weather: temperature,
       );
 
-      context.pop();
+      clearDataAndPop();
     }
+  }
+
+  clearDataAndPop({dynamic popedValue}) {
+    context.read<LocationCubit>().clearLocation();
+    context.read<WeatherCubit>().clearWeather();
+    context.pop(popedValue);
   }
 }

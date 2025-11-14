@@ -50,6 +50,7 @@ class JournalsCubit extends Cubit<JournalsState> {
     required String content,
     required DateTime date,
     required Status status,
+    required String weather,
     required List<JournalAttachment> attachments,
     required LocationModel? location,
   }) async {
@@ -77,6 +78,7 @@ class JournalsCubit extends Cubit<JournalsState> {
         isLocked: false,
         location: location,
         status: status.name,
+        weather: weather,
       );
 
       await _journalRepository.addJournal(userId, journal);
@@ -147,9 +149,10 @@ class JournalsCubit extends Cubit<JournalsState> {
     }
   }
 
-  Future<void> deleteJournal(String journalId) async {
+  Future<void> deleteJournal(String journalId, List<String> paths) async {
     try {
       await _journalRepository.deleteJournal(userId, journalId);
+      _storageService.deleteImages(paths);
       if (state is JournalsLoaded) {
         final currentJournals = (state as JournalsLoaded).journals;
         emit(
@@ -161,6 +164,39 @@ class JournalsCubit extends Cubit<JournalsState> {
     } catch (e) {
       emit(JournalsError('Failed to delete journal'));
     }
+  }
+
+  List<JournalModel> getJournalsByLocation(LocationModel? loc) {
+    if (state is JournalsLoaded) {
+      final currentJournals = (state as JournalsLoaded).journals;
+      final journalsByLocation = currentJournals
+          .where(
+            (journal) =>
+                journal.location != null &&
+                journal.location!.address == loc!.address,
+          )
+          .toList();
+      return journalsByLocation;
+    }
+    return [];
+  }
+
+  List<JournalModel> search(String value) {
+    if (state is JournalsLoaded) {
+      final currentJournals = (state as JournalsLoaded).journals;
+
+      List<JournalModel> searchResult = currentJournals.where((journal) {
+        String content = journal.content.toLowerCase();
+        String input = value.toLowerCase();
+        if (input == '' || journal.isLocked) {
+          return false;
+        }
+
+        return content.contains(input);
+      }).toList();
+      return searchResult;
+    }
+    return [];
   }
 
   void resetState() {

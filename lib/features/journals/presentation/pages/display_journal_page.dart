@@ -5,8 +5,10 @@ import 'package:onceinmind/core/constants/app_routes.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
 import 'package:onceinmind/core/widgets/appbar_widget.dart';
 import 'package:onceinmind/core/widgets/custom_back_button.dart';
+import 'package:onceinmind/core/widgets/dialog_widget.dart';
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/image_slider_cubit.dart';
+import 'package:onceinmind/features/journals/presentation/cubits/journals_cubit.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/date_stack_widget.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/inline_slider_widget.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/writing_area.dart';
@@ -56,7 +58,22 @@ class _DisplayJournalPageState extends State<DisplayJournalPage> {
           _appBarIcon(
             icon: AppAssets.svgWhiteDelete,
             onTap: () {
-              //show Delete Dialog
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return DialogWidget(
+                    dialogType: DialogType.delete,
+                    onOkPressed: (value) {
+                      context.read<JournalsCubit>().deleteJournal(
+                        _journal.id,
+                        _journal.imagesUrls.map((e) => e.toString()).toList(),
+                      );
+                      context.pop();
+                      context.pop();
+                    },
+                  );
+                },
+              );
             },
           ),
           SizedBox(width: 15),
