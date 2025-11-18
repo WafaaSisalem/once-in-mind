@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:onceinmind/core/utils/type_defs.dart';
 
 class DialogTextFieldWidget extends StatelessWidget {
@@ -125,7 +126,7 @@ class _DialogWidgetState extends State<DialogWidget> {
         ],
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            context.pop();
           },
           child: Text(
             'CANCEL',

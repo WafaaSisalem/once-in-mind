@@ -59,7 +59,14 @@ class JournalModel extends Equatable {
       status = map[AppKeys.status];
 
   @override
-  List<Object?> get props => [content, date, location, status, imagesUrls];
+  List<Object?> get props => [
+    content,
+    date,
+    location,
+    status,
+    imagesUrls,
+    signedUrls,
+  ];
 
   JournalModel copyWith({
     String? content,
@@ -69,6 +76,7 @@ class JournalModel extends Equatable {
     String? weather,
     List<dynamic>? imagesUrls,
     String? status,
+    List<String>? signedUrls,
   }) {
     return JournalModel(
       id: id,
@@ -79,6 +87,7 @@ class JournalModel extends Equatable {
       weather: weather ?? this.weather,
       imagesUrls: imagesUrls ?? this.imagesUrls,
       status: status ?? this.status,
+      signedUrls: signedUrls ?? this.signedUrls,
     );
   }
 }

@@ -79,20 +79,8 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
               onPressed: () {
                 if (!isEditing) {
                   if (controller.text.trim() == '' && attachments.isEmpty) {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return DialogWidget(
-                          dialogType: DialogType.delete,
+                    clearDataAndPop();
 
-                          onOkPressed: (value) {
-                            clearDataAndPop();
-                            context.pop();
-                            //or navigate to home context.go
-                          },
-                        );
-                      },
-                    );
                     return;
                   } else {
                     showDialog(

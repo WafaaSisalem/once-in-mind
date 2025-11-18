@@ -4,6 +4,7 @@ import 'package:onceinmind/core/utils/status_enum.dart';
 
 class AppAssets {
   static const String google = 'assets/images/google.png';
+  static const String onboarding = 'assets/images/onboarding.png';
   static final SvgPicture signUp = SvgPicture.asset(
     'assets/images/svgs/sign_up.svg',
   );

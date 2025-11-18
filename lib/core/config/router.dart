@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onceinmind/core/constants/app_routes.dart';
+import 'package:onceinmind/core/utils/onboarding_service.dart';
+import 'package:onceinmind/features/auth/presentation/pages/onboarding_page.dart';
 import 'package:onceinmind/features/auth/presentation/pages/sign_in_page.dart';
 import 'package:onceinmind/features/auth/presentation/pages/sign_up_page.dart';
 
@@ -13,29 +15,51 @@ import 'package:onceinmind/features/journals/data/models/journal_model.dart';
 import 'package:onceinmind/features/journals/presentation/pages/display_journal_page.dart';
 import 'package:onceinmind/features/journals/presentation/pages/image_viewer_page.dart';
 import 'package:onceinmind/features/journals/presentation/pages/journal_editor_page.dart';
+import 'package:onceinmind/features/journals/presentation/pages/masterpass_page.dart';
 import 'package:onceinmind/features/location/presentation/pages/location_page.dart';
 
 class AppRouter {
   static final GoRouter _router = GoRouter(
-    initialLocation: '/${AppRoutes.signIn}',
+    initialLocation: '/${AppRoutes.onboarding}',
     debugLogDiagnostics: true,
-    redirect: (context, state) {
-      final authState = context.read<AuthCubit>().state;
-      final loggingIn =
-          state.fullPath == '/${AppRoutes.signIn}' ||
-          state.fullPath == '/${AppRoutes.signUp}';
+    redirect: (context, state) async {
+      // Check onboarding status first
+      final isOnboardingCompleted =
+          await OnboardingService.isOnboardingCompleted();
+      final isOnboardingPage = state.fullPath == '/${AppRoutes.onboarding}';
 
-      if (authState is AuthSignedIn && loggingIn) {
-        return '/${AppRoutes.home}';
+      if (!isOnboardingCompleted && !isOnboardingPage) {
+        return '/${AppRoutes.onboarding}';
       }
 
-      if (authState is AuthSignedOut && !loggingIn) {
+      if (isOnboardingCompleted && isOnboardingPage) {
         return '/${AppRoutes.signIn}';
+      }
+
+      if (isOnboardingCompleted) {
+        final authState = context.read<AuthCubit>().state;
+        final loggingIn =
+            state.fullPath == '/${AppRoutes.signIn}' ||
+            state.fullPath == '/${AppRoutes.signUp}';
+
+        if (authState is AuthSignedIn && loggingIn) {
+          return '/${AppRoutes.home}';
+        }
+
+        if (authState is AuthSignedOut && !loggingIn && !isOnboardingPage) {
+          return '/${AppRoutes.signIn}';
+        }
       }
 
       return null;
     },
     routes: [
+      // Onboarding route
+      GoRoute(
+        path: '/${AppRoutes.onboarding}',
+        name: AppRoutes.onboarding,
+        builder: (context, state) => const OnboardingPage(),
+      ),
       // Auth routes
       GoRoute(
         path: '/${AppRoutes.signIn}',
@@ -98,6 +122,12 @@ class AppRouter {
                   JournalModel journal = state.extra as JournalModel;
                   return ImageViewerPage(journal: journal);
                 },
+              ),
+              GoRoute(
+                path: AppRoutes.masterPassword,
+                name: AppRoutes.masterPassword,
+                builder: (context, state) =>
+                    MasterPassScreen(journal: state.extra as JournalModel),
               ),
             ],
             builder: (context, state) {

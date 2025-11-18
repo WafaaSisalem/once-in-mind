@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) {
-            return UserCubit(_userRepository);
+            return UserCubit(_userRepository, _authRepository);
           },
         ),
         BlocProvider(

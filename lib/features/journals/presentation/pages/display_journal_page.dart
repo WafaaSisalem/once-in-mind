@@ -1,11 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onceinmind/core/constants/app_routes.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
+import 'package:onceinmind/core/utils/password_utils.dart';
+import 'package:onceinmind/core/utils/toast.dart';
 import 'package:onceinmind/core/widgets/appbar_widget.dart';
 import 'package:onceinmind/core/widgets/custom_back_button.dart';
 import 'package:onceinmind/core/widgets/dialog_widget.dart';
+import 'package:onceinmind/features/auth/data/models/user_model.dart';
+import 'package:onceinmind/features/auth/presentation/cubits/auth/auth_cubit.dart';
+import 'package:onceinmind/features/auth/presentation/cubits/user/user_cubit.dart';
+import 'package:onceinmind/features/auth/presentation/cubits/user/user_state.dart';
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/image_slider_cubit.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/journals_cubit.dart';
@@ -82,7 +90,7 @@ class _DisplayJournalPageState extends State<DisplayJournalPage> {
                 ? AppAssets.svgWhiteUnlock
                 : AppAssets.svgWhiteLock,
             onTap: () {
-              //lock logic
+              onlockTap();
             },
           ),
           SizedBox(width: 15),
@@ -128,5 +136,52 @@ class _DisplayJournalPageState extends State<DisplayJournalPage> {
       onTap: onTap,
       child: SizedBox(width: 18, height: 18, child: icon),
     );
+  }
+
+  onlockTap() async {
+    final masterPassword = await context.read<UserCubit>().masterPassword;
+    if (masterPassword.isEmpty) {
+      if (mounted) {
+        context.pushNamed(AppRoutes.masterPassword, extra: widget.journal);
+      }
+    } else {
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return DialogWidget(
+              dialogType: DialogType.password,
+
+              onOkPressed: (value) {
+                if (value.isEmpty) {
+                  passwordEmptyToast(context);
+                } else if (masterPassword == value) {
+                  // Toggle lock state and update via JournalsCubit
+                  final updatedJournal = _journal.copyWith(
+                    isLocked: !_journal.isLocked,
+                  );
+                  context.read<JournalsCubit>().updateJournal(updatedJournal);
+                  setState(() {
+                    _journal = updatedJournal;
+                  });
+
+                  // Close the password dialog
+                  context.pop();
+
+                  showMyToast(
+                    message: updatedJournal.isLocked
+                        ? 'Journal locked'
+                        : 'Journal unlocked',
+                    context: context,
+                  );
+                } else {
+                  wrongPasswordToast(context);
+                }
+              },
+            );
+          },
+        );
+      }
+    }
   }
 }

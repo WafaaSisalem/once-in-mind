@@ -1,16 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:onceinmind/core/constants/app_routes.dart';
-import 'package:onceinmind/core/constants/app_strings.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
-import 'package:onceinmind/core/utils/status_enum.dart';
+import 'package:onceinmind/core/utils/password_utils.dart';
+import 'package:onceinmind/core/widgets/dialog_widget.dart';
+import 'package:onceinmind/features/auth/presentation/cubits/user/user_cubit.dart';
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
-import 'package:onceinmind/features/journals/presentation/cubits/journals_cubit.dart';
-import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab/status_button.dart';
 
 class JournalItem extends StatelessWidget {
   const JournalItem({super.key, required this.journal});
@@ -21,7 +19,32 @@ class JournalItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.goNamed(AppRoutes.displayJournal, extra: journal);
+        if (journal.isLocked) {
+          showDialog(
+            context: context,
+            builder: (context) => DialogWidget(
+              dialogType: DialogType.password,
+              onOkPressed: (value) async {
+                if (value.isEmpty) {
+                  passwordEmptyToast(context);
+                } else {
+                  final masterPassword = await context
+                      .read<UserCubit>()
+                      .masterPassword;
+
+                  if (masterPassword == value) {
+                    context.pop();
+                    context.goNamed(AppRoutes.displayJournal, extra: journal);
+                  } else {
+                    wrongPasswordToast(context);
+                  }
+                }
+              },
+            ),
+          );
+        } else {
+          context.goNamed(AppRoutes.displayJournal, extra: journal);
+        }
       },
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
@@ -44,14 +67,22 @@ class JournalItem extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _buildSubhead(context),
-                          buildJournalContent(context),
+                          journal.isLocked
+                              ? Center(
+                                  child: SizedBox(
+                                    width: 50,
+                                    height: 50,
+                                    child: AppAssets.svgGreyLock,
+                                  ),
+                                )
+                              : buildJournalContent(context),
                           SizedBox(height: 10),
                           Spacer(),
                           buildJournalBottomPart(Theme.of(context)),
                         ],
                       ),
                     ),
-                    if (journal.imagesUrls.isNotEmpty) ...[
+                    if (journal.imagesUrls.isNotEmpty && !journal.isLocked) ...[
                       //journalImage
                       SizedBox(width: 10),
                       _buildImage(),
@@ -146,7 +177,7 @@ class JournalItem extends StatelessWidget {
           Text(' ${journal.weather}', style: myTextStyle(theme)),
           SizedBox(width: 10),
           SizedBox(
-            width: 110,
+            width: 120,
             child: Text(
               journal.location == null ? '' : journal.location!.address,
               style: myTextStyle(theme),

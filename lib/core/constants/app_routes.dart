@@ -1,4 +1,6 @@
 class AppRoutes {
+  // Onboarding
+  static const onboarding = 'onboarding';
   // Auth
   static const signIn = 'sign-in';
   static const signUp = 'sign-up';
@@ -14,4 +16,5 @@ class AppRoutes {
   static const search = 'search';
   static const gallery = 'gallery';
   static const location = 'location';
+  static const masterPassword = 'master-password';
 }

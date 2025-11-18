@@ -53,6 +53,7 @@ class JournalsCubit extends Cubit<JournalsState> {
     required String weather,
     required List<JournalAttachment> attachments,
     required LocationModel? location,
+    isLocked = false,
   }) async {
     try {
       emit(JournalsLoading());
@@ -75,7 +76,7 @@ class JournalsCubit extends Cubit<JournalsState> {
         content: content,
         date: date,
         imagesUrls: imagePaths,
-        isLocked: false,
+        isLocked: isLocked,
         location: location,
         status: status.name,
         weather: weather,
@@ -197,6 +198,20 @@ class JournalsCubit extends Cubit<JournalsState> {
       return searchResult;
     }
     return [];
+  }
+
+  updateJournal(JournalModel journal) async {
+    if (state is JournalsLoaded) {
+      await _journalRepository.updateJournal(userId, journal);
+      final currentJournals = (state as JournalsLoaded).journals;
+      final updatedJournals = currentJournals.map((j) {
+        if (j.id == journal.id) {
+          return journal;
+        }
+        return j;
+      }).toList();
+      emit(JournalsLoaded(updatedJournals));
+    }
   }
 
   void resetState() {

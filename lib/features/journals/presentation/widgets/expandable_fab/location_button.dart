@@ -38,7 +38,7 @@ class LocationButton extends StatelessWidget {
           showDialog(
             context: context,
             builder: (ctx) => AlertDialog(
-              title: const Text('No Location Detected...'),
+              title: const Text('Set Your Location...'),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
