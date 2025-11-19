@@ -15,6 +15,7 @@ class CustomExpandableFab extends StatelessWidget {
   final List<JournalAttachment> attachments;
   final Function(LocationModel location) onLocationPressed;
   final Function(String temperature) onWeatherLoaded;
+  final Status initialStatus;
   const CustomExpandableFab({
     super.key,
     required this.onStatusChanged,
@@ -22,6 +23,7 @@ class CustomExpandableFab extends StatelessWidget {
     required this.attachments,
     required this.onLocationPressed,
     required this.onWeatherLoaded,
+    required this.initialStatus,
   });
 
   @override
@@ -48,6 +50,7 @@ class CustomExpandableFab extends StatelessWidget {
           },
         ),
         StatusButton(
+          initialStatus: initialStatus,
           onPressed: (status) {
             onStatusChanged(status);
           },

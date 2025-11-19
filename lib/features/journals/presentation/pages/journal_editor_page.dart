@@ -172,6 +172,7 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
       ),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: CustomExpandableFab(
+        initialStatus: status,
         onWeatherLoaded: (temperature) {
           this.temperature = temperature;
         },

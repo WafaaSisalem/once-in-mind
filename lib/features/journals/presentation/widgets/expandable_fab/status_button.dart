@@ -5,8 +5,12 @@ import 'package:onceinmind/features/journals/presentation/widgets/expandable_fab
 
 class StatusButton extends StatefulWidget {
   final Function(Status status) onPressed;
-
-  const StatusButton({super.key, required this.onPressed});
+  final Status initialStatus;
+  const StatusButton({
+    super.key,
+    required this.onPressed,
+    required this.initialStatus,
+  });
 
   @override
   State<StatusButton> createState() => _StatusButtonState();
@@ -14,6 +18,11 @@ class StatusButton extends StatefulWidget {
 
 class _StatusButtonState extends State<StatusButton> {
   Status status = Status.smile;
+  @override
+  void initState() {
+    status = widget.initialStatus;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

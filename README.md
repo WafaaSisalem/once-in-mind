@@ -1,3 +1,96 @@
-# onceinmind
+# Once in Mind
 
-A new Flutter project.
+[image attached]
+
+A Flutter journaling application that provides a private space for users to express their feelings and share memories with their future self.
+
+## ✨ Features
+
+- **Journal Entries**: Create entries with text, multiple images, mood tracking, and master password protection
+- **Location & Weather**: Automatically tag entries with location and weather data
+- **Calendar View**: Browse entries chronologically
+- **Gallery**: View all journal images in one place
+- **Search**: Find specific journal entries quickly
+- **Authentication**: Secure sign-up/sign-in with Firebase
+- **Onboarding**: One-time welcome flow for new users
+
+## 🛠️ Tech Stack
+
+**Frontend:** Flutter, BLoC Pattern, GoRouter
+
+**Backend:** Firebase (Auth & Firestore), Supabase (Image Storage)
+
+**Other:** Google Maps, Geolocator, Weather API, Image Picker, Shared Preferences
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Flutter SDK (^3.9.0)
+- Firebase & Supabase accounts
+- Google Maps API key
+
+### Installation
+
+1. Clone the repository
+   ```bash
+   git clone <repository-url>
+   cd onceinmind
+   flutter pub get
+   ```
+
+2. **Firebase Setup**
+   - Create Firebase project
+   - Enable Authentication (Email/Password) and Firestore
+   - Add config files:
+     - Android: `android/app/google-services.json`
+     - iOS: `ios/Runner/GoogleService-Info.plist`
+
+3. **Supabase Setup**
+   - Create Supabase project
+   - Create storage bucket named `journal-images`
+   - Create `.env` file:
+     ```env
+     SUPABASE_URL=your_supabase_url
+     SUPABASE_ANON_KEY=your_supabase_anon_key
+     ```
+
+4. **Google Maps Setup**
+    - Get a Google Maps API key
+    - For Android: Add to `android/app/src/main/AndroidManifest.xml`
+    - For iOS: Add to `ios/Runner/AppDelegate.swift`
+
+5. Run the app
+   ```bash
+   flutter run
+   ```
+
+## 📱 Screenshots
+
+[image attached]
+
+[image attached]
+
+[image attached]
+
+## 🔮 Future Enhancements
+
+### Core Features
+- [ ] Settings screen (theme, language, profile, change master password)
+- [ ] Cloud backup and sync
+- [ ] Export journals to PDF
+- [ ] Rich text formatting in journals
+- [ ] Voice notes
+- [ ] Reminders and notifications
+- [ ] Social sharing options
+
+### AI-Powered Features
+- [ ] **AI Weekly Summary**: Automatic weekly summaries highlighting key moments and patterns
+- [ ] **Best Moments Detection**: AI identifies and surfaces your most memorable journal entries
+- [ ] **Smart Journal Suggestions**: AI analyzes your entries to suggest journal topics and prompts
+- [ ] **Enhanced Journal Creation**: AI-assisted journal creation with content suggestions and formatting
+- [ ] **Sentiment Analysis**: Track emotional patterns and trends over time
+- [ ] **Intelligent Insights**: AI-generated insights and reflections based on your journaling history
+
+---
+
+**Once in Mind** - Your personal space to express feelings and share memories with your future self.
