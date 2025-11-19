@@ -66,17 +66,8 @@ A Flutter journaling application that provides a private space for users to expr
    ```
 
 ## 📱 Screenshots
-
-![photo_2025-11-19_03-56-21](https://github.com/user-attachments/assets/f5f1f57f-ec30-49fb-8b94-9c4eedb14fb1)
-![photo_2025-11-19_03-56-24](https://github.com/user-attachments/assets/f1e4b8aa-6eef-4b50-bee1-c560e7f94c10)
-![photo_2025-11-19_03-56-27](https://github.com/user-attachments/assets/6eaf933c-02b0-4c0c-b303-559e39c8d266)
-![photo_2025-11-19_03-56-30](https://github.com/user-attachments/assets/df187614-cd12-4b5a-8c1f-564a3664455e)
-![photo_2025-11-19_03-55-54](https://github.com/user-attachments/assets/23299186-55b5-494d-b20b-017f1c64cdf8)
-![photo_2025-11-19_03-55-59](https://github.com/user-attachments/assets/da8cec93-8c0a-4ab9-a00d-3381dc787ff9)
-![photo_2025-11-19_03-56-07](https://github.com/user-attachments/assets/71217199-b81e-429d-9fd0-f2f9287e972d)
-![photo_2025-11-19_03-56-10](https://github.com/user-attachments/assets/831d7ec2-eaf1-46d7-a706-bb021877864d)
-![photo_2025-11-19_03-56-13](https://github.com/user-attachments/assets/81a19570-4535-444a-9aaa-30656376f47d)
-![photo_2025-11-19_03-56-18](https://github.com/user-attachments/assets/0a0fca74-3365-4e03-8888-8468a5818434)
+<img width="1000" height="480" alt="Adding Journal and lock it scenario" src="https://github.com/user-attachments/assets/33a1cc14-7312-4943-a801-4d7cd288d18f" />
+<img width="1000" height="480" alt="Some other pages" src="https://github.com/user-attachments/assets/d60e2783-47f1-4a43-aa82-2e53fd7edff6" />
 
 ## 🔮 Future Enhancements
 
