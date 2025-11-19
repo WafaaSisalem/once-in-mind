@@ -1,6 +1,6 @@
 # Once in Mind
 
-<img width="400" height="200" alt="Home Page" src="https://github.com/user-attachments/assets/f6bb9e2a-919e-4900-ba80-75b18b5b7a8d" />
+<img width="1000" height="480" alt="Home Page (1)" src="https://github.com/user-attachments/assets/f4486b05-c708-4c40-89e7-42217ca0b507" />
 
 
 A Flutter journaling application that provides a private space for users to express their feelings and share memories with their future self.
