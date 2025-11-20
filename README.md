@@ -8,12 +8,12 @@ A Flutter journaling application that provides a private space for users to expr
 ## ✨ Features
 
 - **Journal Entries**: Create entries with text, multiple images, mood tracking, and master password protection
-- **Location & Weather**: Automatically tag entries with location and weather data
-- **Calendar View**: Browse entries chronologically
+- **Location & Weather**: Add your location when writing a journal entry, and the weather will be added automatically.
+- **Calendar View**: Browse entries by date
 - **Gallery**: View all journal images in one place
 - **Search**: Find specific journal entries quickly
 - **Authentication**: Secure sign-up/sign-in with Firebase
-- **Onboarding**: One-time welcome flow for new users
+- **Master Password Lock**: You can lock any journal entry individually for extra privacy.
 
 ## 🛠️ Tech Stack
 
@@ -26,7 +26,7 @@ A Flutter journaling application that provides a private space for users to expr
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Flutter SDK (^3.9.0)
+- Flutter SDK 
 - Firebase & Supabase accounts
 - Google Maps API key
 
