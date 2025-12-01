@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onceinmind/core/constants/app_routes.dart';
-import 'package:onceinmind/core/utils/onboarding_service.dart';
 import 'package:onceinmind/features/auth/presentation/pages/onboarding_page.dart';
 import 'package:onceinmind/features/auth/presentation/pages/sign_in_page.dart';
 import 'package:onceinmind/features/auth/presentation/pages/sign_up_page.dart';
@@ -17,6 +16,7 @@ import 'package:onceinmind/features/journals/presentation/pages/image_viewer_pag
 import 'package:onceinmind/features/journals/presentation/pages/journal_editor_page.dart';
 import 'package:onceinmind/features/journals/presentation/pages/masterpass_page.dart';
 import 'package:onceinmind/features/location/presentation/pages/location_page.dart';
+import 'package:onceinmind/services/sharedpref_service.dart';
 
 class AppRouter {
   static final GoRouter _router = GoRouter(
@@ -37,7 +37,9 @@ class AppRouter {
       }
 
       if (isOnboardingCompleted) {
-        final authState = context.read<AuthCubit>().state;
+        final authState = context
+            .read<AuthCubit>()
+            .state; //you can store this in shared pref
         final loggingIn =
             state.fullPath == '/${AppRoutes.signIn}' ||
             state.fullPath == '/${AppRoutes.signUp}';
@@ -96,9 +98,6 @@ class AppRouter {
               ),
             ],
             builder: (context, state) => JournalEditorPage(),
-            // builder: (context, state) => AddJournalPage(),
-            // path: AppRoutes.addJournal,
-            // name: AppRoutes.addJournal,
           ),
 
           //display journal Screen
@@ -112,8 +111,6 @@ class AppRouter {
                 name: AppRoutes.editJournal,
                 builder: (context, state) =>
                     JournalEditorPage(journal: state.extra as JournalModel),
-                // builder: (context, state) =>
-                //     EditJournalPage(journal: state.extra as JournalModel),
               ),
               GoRoute(
                 path: AppRoutes.imageViewerPage,

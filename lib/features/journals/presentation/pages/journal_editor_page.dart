@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:go_router/go_router.dart';
+import 'package:onceinmind/core/config/theme.dart';
 import 'package:onceinmind/core/utils/status_enum.dart';
 import 'package:onceinmind/core/widgets/appbar_widget.dart';
 import 'package:onceinmind/core/widgets/custom_back_button.dart';
@@ -134,7 +135,7 @@ class _JournalEditorPageState extends State<JournalEditorPage> {
               icon: const Icon(
                 Icons.check_rounded,
                 size: 28,
-                color: Colors.white, //
+                color: AppColors.white,
               ),
             ),
           ),

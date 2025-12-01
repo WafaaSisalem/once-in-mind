@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:onceinmind/core/config/theme.dart';
 import 'package:onceinmind/core/constants/app_routes.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
 import 'package:onceinmind/core/utils/password_utils.dart';
@@ -110,7 +111,7 @@ class JournalItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(5),
             boxShadow: [
               BoxShadow(
-                color: const Color(0x28000000), //
+                color: AppColors.shadowColor, //
                 offset: Offset(0, 1),
                 blurRadius: 3,
               ),
@@ -169,7 +170,7 @@ class JournalItem extends StatelessWidget {
           CircleAvatar(
             radius: 5,
 
-            backgroundColor: Colors.white, // S
+            backgroundColor: AppColors.white, // S
             child: AppAssets.statusToSvg(journal.status),
           ),
           SizedBox(width: 10),

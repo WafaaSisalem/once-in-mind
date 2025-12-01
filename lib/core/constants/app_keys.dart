@@ -12,4 +12,7 @@ class AppKeys {
   static const isLocked = 'isLocked';
   static const imageUrl = 'imageUrl';
   static const status = "status";
+  static const latitude = 'lat';
+  static const longitude = 'lng';
+  static const address = 'address';
 }

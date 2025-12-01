@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:onceinmind/core/config/theme.dart';
 import 'package:onceinmind/core/utils/date_utils.dart';
 
 class DatePickerButton extends StatefulWidget {
@@ -43,7 +44,7 @@ class _DatePickerButtonState extends State<DatePickerButton> {
         height: 23,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(2),
-          color: Colors.white,
+          color: AppColors.white,
         ),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 5),
@@ -60,7 +61,7 @@ class _DatePickerButtonState extends State<DatePickerButton> {
                 ),
               ),
               SizedBox(width: 5),
-              Container(height: 15, width: 1, color: Colors.grey[200]),
+              Container(height: 15, width: 1, color: AppColors.grey200),
               Icon(
                 Icons.keyboard_arrow_down,
                 color: theme.colorScheme.secondary,

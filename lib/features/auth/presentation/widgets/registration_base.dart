@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onceinmind/core/config/theme.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
 
 class RegistrationUpperSection extends StatelessWidget {
@@ -23,7 +24,7 @@ class RegistrationUpperSection extends StatelessWidget {
         Text(
           title,
           style: TextStyle(
-            color: Colors.black, //
+            color: AppColors.black,
             fontSize: 22,
             fontWeight: FontWeight.w700,
           ),

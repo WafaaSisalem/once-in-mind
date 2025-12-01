@@ -1,16 +1,17 @@
 import 'package:equatable/equatable.dart';
+import 'package:onceinmind/core/constants/app_keys.dart';
 
 class UserModel extends Equatable {
   final String id;
-  String masterPassword = '';
+  final String masterPassword;
 
-  UserModel({required this.id, this.masterPassword = ''});
+  const UserModel({required this.id, this.masterPassword = ''});
   UserModel.fromMap(Map map)
-    : id = map['id'],
-      masterPassword = map['masterPassword'];
+    : id = map[AppKeys.id],
+      masterPassword = map[AppKeys.masterPass];
 
   toMap() {
-    return {'id': id, 'masterPassword': masterPassword};
+    return {AppKeys.id: id, AppKeys.masterPass: masterPassword};
   }
 
   @override

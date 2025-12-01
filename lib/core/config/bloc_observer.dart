@@ -5,7 +5,7 @@ class AppBlocObserver extends BlocObserver {
   @override
   void onCreate(BlocBase bloc) {
     super.onCreate(bloc);
-    print('🟢 onCreate --> ${bloc.runtimeType}');
+    print(' onCreate --> ${bloc.runtimeType}');
   }
 
   // 🟦 يُستدعى عند كل تغيّر في الـ state داخل Bloc أو Cubit (بدون Events)
@@ -13,7 +13,7 @@ class AppBlocObserver extends BlocObserver {
   void onChange(BlocBase bloc, Change change) {
     super.onChange(bloc, change);
     print(
-      '🔵 onChange --> ${bloc.runtimeType} : ${change.currentState} → ${change.nextState}',
+      ' onChange --> ${bloc.runtimeType} : ${change.currentState} → ${change.nextState}',
     );
   }
 
@@ -21,7 +21,7 @@ class AppBlocObserver extends BlocObserver {
   @override
   void onEvent(Bloc bloc, Object? event) {
     super.onEvent(bloc, event);
-    print('🟠 onEvent --> ${bloc.runtimeType} : $event');
+    print(' onEvent --> ${bloc.runtimeType} : $event');
   }
 
   // 🟣 يُستدعى لما يصير Transition داخل Bloc (من State إلى State عبر Event)
@@ -34,7 +34,7 @@ class AppBlocObserver extends BlocObserver {
   // 🔴 يُستدعى عند حدوث أي خطأ داخل Bloc أو Cubit
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
-    print('🔴 onError --> ${bloc.runtimeType} : $error');
+    print(' onError --> ${bloc.runtimeType} : $error');
     super.onError(bloc, error, stackTrace);
   }
 
@@ -42,6 +42,6 @@ class AppBlocObserver extends BlocObserver {
   @override
   void onClose(BlocBase bloc) {
     super.onClose(bloc);
-    print('⚫ onClose --> ${bloc.runtimeType}');
+    print(' onClose --> ${bloc.runtimeType}');
   }
 }

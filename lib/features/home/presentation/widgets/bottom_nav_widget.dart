@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widget_previews.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:onceinmind/core/config/theme.dart';
 
 class BottomNavWidget extends StatefulWidget {
   const BottomNavWidget({
@@ -32,7 +34,7 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Colors.grey[200]!, //
+            color: AppColors.grey200,
             offset: Offset(0, -4),
             blurRadius: 4,
           ),
@@ -40,7 +42,7 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(36)),
       ),
       child: BottomAppBar(
-        color: Colors.white, //
+        color: AppColors.white,
         shape: const CircularNotchedRectangle(),
         notchMargin: 10,
         child: SizedBox(
@@ -67,7 +69,7 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
         radius: 18,
         backgroundColor: selectedIndex == index
             ? theme.primaryColor
-            : Colors.white, //
+            : AppColors.white,
         child: TextButton(
           onPressed: () {
             widget.onTap(index);
@@ -76,7 +78,9 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
           },
           child: SvgPicture.asset(
             widget.svgs[index],
-            color: selectedIndex == index ? Colors.white : theme.primaryColor,
+            color: selectedIndex == index
+                ? AppColors.white
+                : theme.primaryColor,
           ),
         ),
       ),

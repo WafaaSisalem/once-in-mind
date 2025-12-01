@@ -6,7 +6,7 @@ import 'package:onceinmind/features/journals/data/models/journal_model.dart';
 import 'package:onceinmind/features/journals/data/repositories/journal_repository.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/journals_state.dart';
 import 'package:onceinmind/features/location/data/models/location_model.dart';
-import 'package:onceinmind/services/media/supabase_storage_service.dart';
+import 'package:onceinmind/services/supabase_storage_service.dart';
 
 class JournalsCubit extends Cubit<JournalsState> {
   final JournalRepository _journalRepository;
@@ -15,6 +15,18 @@ class JournalsCubit extends Cubit<JournalsState> {
   JournalsCubit(this._journalRepository, this._authRepository)
     : super(JournalsInitial());
   get userId => _authRepository.currentUser?.uid;
+
+  JournalModel? getJournalById(String journalId) {
+    if (state is JournalsLoaded) {
+      final currentJournals = (state as JournalsLoaded).journals;
+      try {
+        return currentJournals.firstWhere((journal) => journal.id == journalId);
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  }
 
   Future<void> fetchJournals() async {
     if (state is JournalsLoaded || state is JournalsLoading) return;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:onceinmind/core/config/theme.dart';
 
 showMyToast({
   required String message,
@@ -16,7 +17,7 @@ showMyToast({
     duration: const Duration(seconds: 4),
     curve: Curves.elasticOut,
     reverseCurve: Curves.linear,
-    backgroundColor: Colors.grey[300],
+    backgroundColor: AppColors.grey300,
     textStyle: Theme.of(context).textTheme.titleSmall,
   );
 }

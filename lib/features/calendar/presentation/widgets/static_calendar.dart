@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
+import 'package:onceinmind/core/config/theme.dart';
 import 'package:onceinmind/core/utils/date_utils.dart';
 
 class StaticCalendar extends StatefulWidget {
@@ -30,7 +31,7 @@ class _StaticCalendarState extends State<StaticCalendar> {
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               boxShadow: [
                 BoxShadow(
                   color: const Color(0x26000000), //
@@ -100,7 +101,7 @@ class _StaticCalendarState extends State<StaticCalendar> {
   }
 }
 
-calendarTextStyle({color = Colors.white, fontWeight = FontWeight.w500}) {
+calendarTextStyle({color = AppColors.white, fontWeight = FontWeight.w500}) {
   return TextStyle(
     color: color,
     fontWeight: fontWeight,

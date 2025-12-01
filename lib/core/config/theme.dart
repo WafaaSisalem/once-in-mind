@@ -10,6 +10,9 @@ class AppColors {
   static const Color black = Colors.black;
   static const Color hintColor = Color(0x73C3C3C3);
   static const Color grey300 = Color(0xFFE0E0E0);
+  static const Color grey200 = Color(0xFFEEEEEE);
+  static const Color errorColor = Colors.red;
+  static const Color cancelColor = Color(0xFFE0BFEA);
 }
 
 class AppTextStyles {
@@ -94,7 +97,7 @@ class AppTheme {
         primary: AppColors.primaryColor,
         secondary: AppColors.secondaryColor,
         surface: AppColors.scaffoldBackgroundColor,
-        error: Colors.red,
+        error: AppColors.errorColor,
       ),
       textSelectionTheme: const TextSelectionThemeData(
         selectionHandleColor: AppColors.secondaryColor,

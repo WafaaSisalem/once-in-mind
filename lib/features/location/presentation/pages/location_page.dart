@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:onceinmind/core/config/theme.dart';
 import 'package:onceinmind/core/utils/address.dart';
 import 'package:onceinmind/core/widgets/appbar_widget.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
@@ -60,7 +61,7 @@ class _LocationPageState extends State<LocationPage> {
               icon: const Icon(
                 Icons.close_rounded,
                 size: 30,
-                color: Colors.white,
+                color: AppColors.white,
               ),
               onPressed: () => context.pop(),
             ),

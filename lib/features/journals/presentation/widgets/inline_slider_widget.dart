@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:onceinmind/core/config/theme.dart';
+import 'package:onceinmind/core/constants/app_routes.dart';
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
 import 'package:onceinmind/features/journals/presentation/cubits/image_slider_cubit.dart';
-import 'package:onceinmind/features/journals/presentation/pages/image_viewer_page.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/custom_slider_widget.dart';
 
 class InlineSliderWidget extends StatelessWidget {
@@ -19,7 +21,7 @@ class InlineSliderWidget extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: const Color(0x28000000), //
+            color: AppColors.shadowColor, //
             offset: Offset(0, 3),
             blurRadius: 6,
           ),
@@ -37,14 +39,14 @@ class InlineSliderWidget extends StatelessWidget {
             },
             journal: journal,
             onTap: () {
-              // context.pushNamed(AppRoutes.imageViewerPage, extra: journal);
+              context.pushNamed(AppRoutes.imageViewerPage, extra: journal);
               // Use Navigator.push to avoid parent route rebuild
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => ImageViewerPage(journal: journal),
-                  fullscreenDialog: true,
-                ),
-              );
+              // Navigator.of(context).push(
+              //   MaterialPageRoute(
+              //     builder: (context) => ImageViewerPage(journal: journal),
+              //     fullscreenDialog: true,
+              //   ),
+              // );
             },
           );
         },

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:onceinmind/core/config/theme.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
 import 'package:onceinmind/core/utils/image_picker_utils.dart';
 import 'package:onceinmind/features/journals/data/models/journal_attachment.dart';
@@ -51,7 +52,7 @@ class _PickImageWidgetState extends State<PickImageWidget> {
                     child: Icon(
                       Icons.add_rounded,
                       size: 48.0,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onceinmind/core/config/theme.dart';
 
 class CustomChildFab extends StatelessWidget {
   final String heroTag;
@@ -20,7 +21,7 @@ class CustomChildFab extends StatelessWidget {
       shape: const CircleBorder(),
 
       heroTag: heroTag,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
 
       onPressed: onPressed,
       child: child,

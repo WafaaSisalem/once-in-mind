@@ -2,6 +2,7 @@ import 'package:custom_marker/marker_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:onceinmind/core/config/theme.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
 import 'package:onceinmind/core/widgets/loading_widget.dart';
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
@@ -95,12 +96,12 @@ class _LocationTabState extends State<LocationTab> {
 
   getMarkerIcon(JournalModel journal) async {
     return await MarkerIcon.downloadResizePictureCircle(
-      journal.imagesUrls.isNotEmpty
+      journal.imagesUrls.isNotEmpty && !journal.isLocked
           ? journal.signedUrls![0]
           : AppAssets.urlPlaceholderImage,
       size: 150,
       addBorder: true,
-      borderColor: Colors.white,
+      borderColor: AppColors.white,
       borderSize: 15,
     );
   }

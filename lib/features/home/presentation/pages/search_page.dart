@@ -9,6 +9,8 @@ import 'package:onceinmind/features/journals/presentation/cubits/journals_state.
 import 'package:onceinmind/features/journals/presentation/widgets/fallback_widget.dart';
 import 'package:onceinmind/features/journals/presentation/widgets/journal_item.dart';
 
+import '../../../../core/config/theme.dart';
+
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
 
@@ -30,7 +32,7 @@ class _SearchPageState extends State<SearchPage> {
                   icon: const Icon(
                     Icons.arrow_back_ios_rounded,
                     size: 28,
-                    color: Colors.white, //
+                    color: AppColors.white,
                   ),
                   onPressed: () {
                     context.pop();
@@ -38,7 +40,7 @@ class _SearchPageState extends State<SearchPage> {
                 ),
                 Expanded(
                   child: TextField(
-                    cursorColor: Colors.grey,
+                    cursorColor: AppColors.hintColor,
                     onChanged: (value) {
                       searchResult = context.read<JournalsCubit>().search(
                         value,
@@ -50,15 +52,15 @@ class _SearchPageState extends State<SearchPage> {
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.all(0),
                       hintStyle: Theme.of(context).textTheme.displaySmall!
-                          .copyWith(color: const Color(0x73C4C4C4)), //
+                          .copyWith(color: AppColors.hintColor),
                       border: const OutlineInputBorder(
                         borderSide: BorderSide.none,
                       ),
                       hintText: 'Search your memories...',
                     ),
-                    style: Theme.of(
-                      context,
-                    ).textTheme.displaySmall!.copyWith(color: Colors.white), //
+                    style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                      color: AppColors.white,
+                    ), //
                   ),
                 ),
               ],

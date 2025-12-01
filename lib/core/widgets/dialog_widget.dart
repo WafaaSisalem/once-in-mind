@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:onceinmind/core/config/theme.dart';
 import 'package:onceinmind/core/utils/type_defs.dart';
 
 class DialogTextFieldWidget extends StatelessWidget {
@@ -20,7 +21,7 @@ class DialogTextFieldWidget extends StatelessWidget {
     ThemeData theme = Theme.of(context);
     return TextField(
       style: theme.textTheme.titleSmall,
-      cursorColor: Colors.grey, //
+      cursorColor: AppColors.hintColor,
       onChanged: onChanged,
       maxLines: isObscured ? 1 : 3,
       minLines: 1,
@@ -29,7 +30,7 @@ class DialogTextFieldWidget extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: theme.textTheme.headlineMedium!.copyWith(
-          color: Colors.grey,
+          color: AppColors.hintColor,
         ), //
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: theme.primaryColor),
@@ -102,7 +103,7 @@ class _DialogWidgetState extends State<DialogWidget> {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return AlertDialog(
-      backgroundColor: Colors.white, //
+      backgroundColor: AppColors.white,
       contentPadding: EdgeInsets.only(top: 10, bottom: 0, left: 20, right: 20),
       titlePadding: EdgeInsets.only(top: 20, bottom: 0, left: 20),
       title: Text(
@@ -131,7 +132,7 @@ class _DialogWidgetState extends State<DialogWidget> {
           child: Text(
             'CANCEL',
             style: theme.textTheme.titleLarge!.copyWith(
-              color: const Color(0xFFE0BFEA),
+              color: AppColors.cancelColor,
             ), // color
           ),
         ),

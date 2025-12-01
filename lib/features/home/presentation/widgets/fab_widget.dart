@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onceinmind/core/config/theme.dart';
 
 class FabWidget extends StatelessWidget {
   const FabWidget({
@@ -33,7 +34,7 @@ class FabWidget extends StatelessWidget {
           shape: CircleBorder(),
           heroTag: heroTag,
           onPressed: onPressed,
-          child: Icon(icon, size: 30, color: Colors.white), //
+          child: Icon(icon, size: 30, color: AppColors.white), //
         ),
       ),
     );

@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:onceinmind/core/config/theme.dart';
 import 'package:onceinmind/core/constants/app_routes.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
-import 'package:onceinmind/core/utils/onboarding_service.dart';
+import 'package:onceinmind/services/sharedpref_service.dart';
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({super.key});
@@ -63,7 +63,6 @@ class OnboardingPage extends StatelessWidget {
             // Bottom section with illustration
             Expanded(
               child: SizedBox(
-                width: double.infinity,
                 child: Image.asset(
                   AppAssets.onboarding,
                   fit: BoxFit.fitWidth,

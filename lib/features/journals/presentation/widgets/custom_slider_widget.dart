@@ -22,10 +22,13 @@ class CustomSliderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ImageSlideshow(
-      key: ValueKey('slideshow_$initialPage'), // Force rebuild when initialPage changes
+      // key: ValueKey(
+      //   'slideshow_$initialPage',
+      // ), // Force rebuild when initialPage changes
       initialPage: initialPage,
       indicatorColor: AppColors.primaryColor,
-      indicatorBackgroundColor: Colors.grey.withOpacity(0.5),
+      indicatorBackgroundColor:
+          AppColors.hintColor, //Colors.grey.withOpacity(0.5)
       onPageChanged: (value) => onPageChanged(value),
       children: journal.signedUrls!
           .map(
@@ -34,7 +37,8 @@ class CustomSliderWidget extends StatelessWidget {
               child: CachedNetworkImage(
                 fit: imageFit,
                 imageUrl: signedUrl,
-                placeholder: (context, url) => Container(color: Colors.black12),
+                placeholder: (context, url) =>
+                    Container(color: AppColors.shadowColor),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
             ),

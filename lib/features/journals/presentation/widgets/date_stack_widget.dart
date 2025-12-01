@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:onceinmind/core/config/theme.dart';
 import 'package:onceinmind/core/utils/app_assets.dart';
 import 'package:onceinmind/features/journals/data/models/journal_model.dart';
 
@@ -55,13 +56,13 @@ class DateStackWidget extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: const Color(0x28000000), //
+            color: AppColors.shadowColor,
             offset: Offset(0, 1),
             blurRadius: 3,
           ),
         ],
         borderRadius: BorderRadius.circular(5),
-        color: Colors.white, //
+        color: AppColors.white, //
       ),
       child: Center(child: AppAssets.statusToSvg(status)),
     );
@@ -78,13 +79,13 @@ class DateStackWidget extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: const Color(0x28000000), //
+            color: AppColors.shadowColor,
             offset: Offset(0, 1),
             blurRadius: 3,
           ),
         ],
         borderRadius: BorderRadius.circular(5),
-        color: Colors.white, //
+        color: AppColors.white, //
       ),
       child: Center(
         child: Text(

@@ -20,7 +20,7 @@ class SupabaseStorageService {
 
         paths.add(path);
       } catch (e) {
-        print('❌ Error uploading or creating signed URL for $path: $e');
+        print('Error uploading or creating signed URL for $path: $e');
       }
     }
 
@@ -36,7 +36,7 @@ class SupabaseStorageService {
         final signedUrl = await storage.createSignedUrl(path, 3600);
         signedUrls.add(signedUrl);
       } catch (e) {
-        print('❌ Error creating signed URL for $path: $e');
+        print('Error creating signed URL for $path: $e');
       }
     }
 
@@ -49,7 +49,7 @@ class SupabaseStorageService {
     try {
       await storage.remove(paths);
     } catch (e) {
-      print('❌ Error deleting images $paths: $e');
+      print('Error deleting images $paths: $e');
     }
   }
 }

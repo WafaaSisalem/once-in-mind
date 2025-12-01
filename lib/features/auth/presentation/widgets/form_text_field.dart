@@ -113,7 +113,7 @@ class _SvgFieldPainter extends CustomPainter {
     // SVG filter0: dy=1, stdDeviation=0.75, opacity about 0.160784
     // We'll simulate with a blurred, slightly offset fill.
     final Paint mainShadow = Paint()
-      ..color = Colors.black.withOpacity(0.08)
+      ..color = Colors.black.withValues(alpha: 0.08)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 1.0);
 
     // draw main shadow slightly shifted down (dy=1)
@@ -123,7 +123,7 @@ class _SvgFieldPainter extends CustomPainter {
     canvas.restore();
 
     // Draw main white shape
-    final Paint mainFill = Paint()..color = Colors.white;
+    final Paint mainFill = Paint()..color = AppColors.white;
     canvas.drawPath(mainPath, mainFill);
 
     // Draw a very light stroke around the main shape for definition
@@ -137,7 +137,7 @@ class _SvgFieldPainter extends CustomPainter {
     // --- Fold shadow + fold fill ---
     // SVG filter1: dy=3, stdDeviation=1.5, same opacity 0.160784
     final Paint foldShadow = Paint()
-      ..color = Colors.black.withOpacity(0.16)
+      ..color = Colors.black.withValues(alpha: 0.16)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2.0);
 
     // shift fold shadow down by 3 units to mimic SVG filter
